@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mens Shop | Online Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+        }
+        .card-img-top {
+            height: 250px;
+            object-fit: cover;
+        }
+        .hero-banner {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        .btn-category {
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="{% url 'shop:product_list' %}">
+                <i class="bi bi-bag-heart-fill text-primary me-2"></i>Mens Shop
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'shop:track_order' %}" class="btn btn-outline-info btn-sm">
+                    <i class="bi bi-truck me-1"></i> Track Order
+                </a>
+                <a href="/admin" class="btn btn-outline-light btn-sm" target="_blank">
+                    <i class="bi bi-person-lock me-1"></i> Admin Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <div class="container my-4">
+        <div class="p-4 p-md-5 hero-banner shadow text-center text-md-start">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-2">Exclusive Mens Collection</h1>
+                    <p class="fs-5 opacity-75 mb-3">Best Quality & Automated Online Ordering!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container py-2">
+        <!-- Categories Navigation -->
+        <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
+            <a href="{% url 'shop:product_list' %}"
+               class="btn btn-category {% if not category %}btn-primary{% else %}btn-white bg-white text-dark shadow-sm{% endif %}">
+                All Products
+            </a>
+            {% for c in categories %}
+                <a href="{% url 'shop:product_list_by_category' c.slug %}"
+                   class="btn btn-category {% if category.slug == c.slug %}btn-primary{% else %}btn-white bg-white text-dark shadow-sm{% endif %}">
+                    {{ c.name }}
+                </a>
+            {% endfor %}
+        </div>
+
+        <!-- Products Grid -->
+        <div class="row g-4 mb-5">
+            {% for product in products %}
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100 shadow-sm product-card">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center card-img-top">
+                                No Image
+                            </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column p-3">
+                            <span class="badge bg-light text-secondary border mb-2 w-auto align-self-start">{{ product.category.name }}</span>
+                            <h5 class="card-title fs-6 fw-bold text-dark text-truncate">{{ product.name }}</h5>
+
+                            <!-- Stock Status Indicator -->
+                            <div class="mb-2">
+                                {% if product.stock > 0 %}
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold">In Stock ({{ product.stock }})</span>
+                                {% else %}
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold">Out of Stock</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
+                                <span class="fs-5 fw-bold text-primary">₹{{ product.price }}</span>
+                                <a href="{% url 'shop:product_detail' product.id product.slug %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-box-seam fs-1 text-muted"></i>
+                    <p class="text-muted mt-2">No products available in this category.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Mens Shop. All Rights Reserved.</p>
+            <small class="text-muted">Automated Order Management System</small>
+        </div>
+    </footer>
+
+</body>
+</html>

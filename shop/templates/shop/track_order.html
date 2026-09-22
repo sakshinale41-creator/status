@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Order - Mens Shop</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background: #f8f9fa; }
+        .track-card { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .status-badge { background: #007bff; color: white; padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="track-card">
+        <h2>🚚 Track Your Order</h2>
+        <form method="GET">
+            <input type="number" name="order_id" placeholder="Order ID (e.g. 1)" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+            <input type="text" name="phone" placeholder="Phone Number" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+            <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px;">Track Status</button>
+        </form>
+
+        {% if order %}
+            <hr>
+            <h3>Order #{{ order.id }} Details</h3>
+            <p><strong>Customer:</strong> {{ order.full_name }}</p>
+            <p><strong>Status:</strong> <span class="status-badge">{{ order.status }}</span></p>
+            <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+        {% elif order_id %}
+            <hr>
+            <p style="color: red;">No order found with these details.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

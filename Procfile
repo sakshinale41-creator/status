@@ -1,0 +1,1 @@
+web: gunicorn Mens_Shop.wsgi

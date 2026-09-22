@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | Mens Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="{% url 'shop:product_list' %}">
+                <i class="bi bi-bag-heart-fill text-primary me-2"></i>Mens Shop
+            </a>
+            <div class="d-flex align-items-center gap-2">
+                <a href="{% url 'shop:track_order' %}" class="btn btn-outline-info btn-sm">
+                    <i class="bi bi-truck me-1"></i> Track Order
+                </a>
+                <a href="/admin" class="btn btn-outline-light btn-sm" target="_blank">
+                    <i class="bi bi-person-lock me-1"></i> Admin Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Content -->
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0"><i class="bi bi-cart3 me-2"></i>Your Shopping Cart</h2>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> Continue Shopping
+            </a>
+        </div>
+
+        {% if cart %}
+            <div class="row g-4">
+                <!-- Cart Items Table -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart %}
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    {% if item.product.image %}
+                                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                    {% else %}
+                                                        <div class="bg-secondary text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                                            <i class="bi bi-image"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                    <span class="fw-semibold">{{ item.product.name }}</span>
+                                                </div>
+                                            </td>
+                                            <td>₹{{ item.price }}</td>
+                                            <td>{{ item.quantity }}</td>
+                                            <td class="fw-bold">₹{{ item.total_price }}</td>
+                                            <td>
+                                                <a href="{% url 'shop:remove_from_cart' item.product.id %}" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> Remove
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4">
+                        <h4 class="fw-bold mb-3">Order Summary</h4>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Total Amount</span>
+                            <span class="fw-bold text-success fs-5">
+                                {% if total_price %}
+                                    ₹{{ total_price }}
+                                {% else %}
+                                    ₹{{ cart.get_total_price }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <hr>
+                        <a href="{% url 'shop:checkout' %}" class="btn btn-primary btn-lg w-100 fw-bold rounded-3">
+                            <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- Empty Cart View -->
+            <div class="card border-0 shadow-sm rounded-4 text-center py-5">
+                <div class="card-body">
+                    <i class="bi bi-cart-x text-muted fs-1 mb-3"></i>
+                    <h4 class="fw-bold text-secondary">Your cart is empty</h4>
+                    <p class="text-muted mb-4">Looks like you haven't added anything to your cart yet.</p>
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg fw-bold rounded-3">
+                        Start Shopping
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-auto">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Mens Shop. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

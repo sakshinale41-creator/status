@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice #{{ order.id }} - Mens Shop</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; background-color: #f4f4f4; }
+        .invoice-card { max-width: 700px; background: #fff; margin: auto; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        .details { margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background: #f8f9fa; }
+        .total { font-size: 20px; font-weight: bold; text-align: right; margin-top: 20px; }
+        .btn-print { background: #28a745; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; float: right; }
+        @media print { .btn-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="invoice-card">
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+        <div class="header">
+            <h2>Mens Shop</h2>
+            <p>Order ID: #{{ order.id }}</p>
+        </div>
+        <div class="details">
+            <p><strong>Customer Name:</strong> {{ order.full_name }}</p>
+            <p><strong>Mobile:</strong> {{ order.phone_number }}</p>
+            <p><strong>Address:</strong> {{ order.address }} - {{ order.pincode }}</p>
+            <p><strong>Date:</strong> {{ order.created_at|date:"d M Y, h:i A" }}</p>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items.all %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₹{{ item.price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="total">
+            Total Paid: ₹{{ order.total_amount }}
+        </div>
+    </div>
+</body>
+</html>
