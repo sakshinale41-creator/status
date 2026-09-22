@@ -20,7 +20,15 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     stock = models.PositiveIntegerField(default=10)
     created = models.DateTimeField(auto_now_add=True)
-    size = models.CharField(max_length=50, blank=True, null=True)
+    SIZE_CHOICES = (
+        ('S', 'Small'),
+        ('M', 'Medium'),
+        ('L', 'Large'),
+        ('XL', 'Extra Large'),
+        ('XXL', 'Double XL'),
+    )
+
+    size = models.CharField(max_length=5, choices=SIZE_CHOICES, blank=True, null=True)
 
     def __str__(self):
         return self.name
