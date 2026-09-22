@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-f1zjp6!c71nw74_0qoy4z+(i58wt(izct08$u)5_(uywev3erb
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'status-8piv.onrender.com',
+    '.onrender.com',
+    'localhost',
+    '127.0.0.1',
 ]
 
 
@@ -45,6 +48,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- Added WhiteNoise here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,7 +62,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'shop' / 'templates'],  # <-- Hi line update kara
+        'DIRS': [BASE_DIR / 'shop' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
