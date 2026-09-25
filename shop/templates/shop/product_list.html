@@ -93,23 +93,50 @@
 
                 <!-- Right Side Options -->
                 <div class="d-flex align-items-center gap-3">
-                    <!-- Profile Dropdown Menu (Flipkart / Meesho Style) -->
+                    <!-- Dynamic Profile Dropdown Menu -->
                     <div class="dropdown">
                         <a href="#" class="text-dark text-decoration-none d-flex align-items-center gap-1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle fs-5"></i>
-                            <span class="d-none d-md-inline small fw-medium">Profile</span>
+                            <span class="d-none d-md-inline small fw-medium">
+                                {% if request.user.is_authenticated %}{{ request.user.username }}{% else %}Profile{% endif %}
+                            </span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="width: 200px;">
-                            <li class="px-3 py-1 mb-2">
-                                <span class="d-block text-muted small">Hello User</span>
-                                <span class="fw-bold small">Access your account</span>
-                            </li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="width: 220px;">
+                            {% if request.user.is_authenticated %}
+                                <li class="px-3 py-1 mb-2">
+                                    <span class="d-block text-muted small">Hello,</span>
+                                    <span class="fw-bold small">{{ request.user.username }}</span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:profile' %}">
+                                        <i class="bi bi-box-seam text-primary"></i> My Orders
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="{% url 'shop:logout' %}">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="px-3 py-1 mb-2 text-center">
+                                    <span class="d-block text-muted small">Hello User</span>
+                                    <span class="fw-bold small">To access your account</span>
+                                </li>
+                                <li class="px-3 mb-2">
+                                    <!-- Meesho Style Sign Up Button -->
+                                    <a class="btn btn-primary w-100 fw-bold py-2 rounded shadow-sm text-center" href="{% url 'shop:phone_signup' %}" style="background-color: #9f2089; border: none;">
+                                        Sign Up
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:profile' %}">
+                                        <i class="bi bi-box-seam text-primary"></i> My Orders
+                                    </a>
+                                </li>
+                            {% endif %}
                             <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:profile' %}">
-                                    <i class="bi bi-box-seam text-primary"></i> My Orders / Track
-                                </a>
-                            </li>
                             <li>
                                 <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:cart_detail' %}">
                                     <i class="bi bi-cart text-success"></i> My Cart
@@ -174,7 +201,7 @@
             {% endfor %}
         </div>
 
-        <!-- Products Grid (Full Width) -->
+        <!-- Products Grid -->
         <div class="row g-4 mb-5">
             {% for product in products %}
                 <div class="col-6 col-md-4 col-lg-3">
