@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Category, Product
 from .models import Order, OrderItem
+from django.db.models import Q
 
 
 # Simple Session-based Cart Helpers
@@ -16,17 +17,27 @@ def save_cart(request, cart):
 
 def product_list(request, category_slug=None):
     category = None
-    categories = Category.objects.all()
+    categories = Category.objects.filter(parent__isnull=True)
     products = Product.objects.all()
+
+    # Search query filter
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        products = products.filter(category=category)
+        subcategories = category.subcategories.all()
+        if subcategories.exists():
+            products = products.filter(category__in=[category] + list(subcategories))
+        else:
+            products = products.filter(category=category)
 
     return render(request, 'shop/product_list.html', {
         'category': category,
         'categories': categories,
-        'products': products
+        'products': products,
+        'query': query,
     })
 
 
@@ -148,3 +159,17 @@ def checkout(request):
 
 def track_order(request):
     return render(request, 'shop/track_order.html')
+
+
+def profile(request):
+    orders = []
+    phone = request.GET.get('phone') or request.session.get('customer_phone')
+
+    if phone:
+        request.session['customer_phone'] = phone
+        orders = Order.objects.filter(phone_number=phone).order_by('-created_at')
+
+    return render(request, 'shop/profile.html', {
+        'orders': orders,
+        'phone': phone
+    })

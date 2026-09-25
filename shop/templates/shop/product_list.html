@@ -3,10 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mens Shop | Online Store</title>
+    <title>Status | Online Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Google Fonts: Libre Baskerville -->
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
     <style>
+        /* Global Font Setting */
+        body, h1, h2, h3, h4, h5, h6, .btn {
+            font-family: 'Libre Baskerville', serif !important;
+        }
+
+        /* Status Brand Name Styling */
+        .navbar-brand {
+            font-size: 2.2rem !important;
+            font-weight: 700;
+            color: #174A8B;
+            font-family: "Poppins", sans-serif;
+            padding: 0;
+        }
+
+        /* Hero Banner Styling */
+        .hero-banner {
+            color: #174A8B;
+            background-color: #C2A878;
+            border-radius: 15px;
+        }
+
+        .hero-banner h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-banner p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+        }
+
         .product-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
@@ -21,33 +57,72 @@
             height: 250px;
             object-fit: cover;
         }
-        .hero-banner {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-            color: white;
-            border-radius: 15px;
-        }
+
         .btn-category {
             border-radius: 20px;
-            padding: 8px 20px;
+            padding: 6px 16px;
             font-weight: 500;
+            font-size: 0.95rem;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="bg-light">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="{% url 'shop:product_list' %}">
-                <i class="bi bi-bag-heart-fill text-primary me-2"></i>Mens Shop
+            <!-- Brand / Shop Name -->
+            <a class="navbar-brand" href="{% url 'shop:product_list' %}">
+                Status
             </a>
-            <div class="d-flex align-items-center gap-2">
-                <a href="{% url 'shop:track_order' %}" class="btn btn-outline-info btn-sm">
-                    <i class="bi bi-truck me-1"></i> Track Order
-                </a>
-                <a href="/admin" class="btn btn-outline-light btn-sm" target="_blank">
-                    <i class="bi bi-person-lock me-1"></i> Admin Login
-                </a>
+
+            <!-- Toggle for mobile -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                <!-- Search Box (Center) -->
+                <form method="GET" action="{% url 'shop:product_list' %}" class="d-flex flex-grow-1 mx-lg-5 my-2 my-lg-0" style="max-width: 500px;">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                        <input type="text" name="q" class="form-control bg-light border-start-0 shadow-none" placeholder="Try Kurta, Jeans or Search by Product..." value="{{ query|default:'' }}">
+                    </div>
+                </form>
+
+                <!-- Right Side Options -->
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Profile Dropdown Menu (Flipkart / Meesho Style) -->
+                    <div class="dropdown">
+                        <a href="#" class="text-dark text-decoration-none d-flex align-items-center gap-1 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5"></i>
+                            <span class="d-none d-md-inline small fw-medium">Profile</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="width: 200px;">
+                            <li class="px-3 py-1 mb-2">
+                                <span class="d-block text-muted small">Hello User</span>
+                                <span class="fw-bold small">Access your account</span>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:profile' %}">
+                                    <i class="bi bi-box-seam text-primary"></i> My Orders / Track
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:cart_detail' %}">
+                                    <i class="bi bi-cart text-success"></i> My Cart
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a href="{% url 'shop:cart_detail' %}" class="text-dark text-decoration-none d-flex align-items-center gap-1 position-relative">
+                        <i class="bi bi-cart3 fs-5"></i>
+                        <span class="d-none d-md-inline small fw-medium">Cart</span>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -66,21 +141,40 @@
 
     <!-- Main Content -->
     <div class="container py-2">
-        <!-- Categories Navigation -->
+        <!-- Horizontal Categories Navigation -->
         <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
-            <a href="{% url 'shop:product_list' %}"
-               class="btn btn-category {% if not category %}btn-primary{% else %}btn-white bg-white text-dark shadow-sm{% endif %}">
-                All Products
-            </a>
             {% for c in categories %}
-                <a href="{% url 'shop:product_list_by_category' c.slug %}"
-                   class="btn btn-category {% if category.slug == c.slug %}btn-primary{% else %}btn-white bg-white text-dark shadow-sm{% endif %}">
-                    {{ c.name }}
-                </a>
+                <div class="dropdown">
+                    {% if c.subcategories.exists %}
+                        <button class="btn btn-category dropdown-toggle {% if category.slug == c.slug or category.parent.slug == c.slug %}btn-primary text-white{% else %}bg-white text-dark shadow-sm{% endif %}"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ c.name }}
+                        </button>
+                        <ul class="dropdown-menu shadow">
+                            <li>
+                                <a class="dropdown-item fw-bold" href="{% url 'shop:product_list_by_category' c.slug %}">All {{ c.name }}</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            {% for sub in c.subcategories.all %}
+                                <li>
+                                    <a class="dropdown-item {% if category.slug == sub.slug %}active{% endif %}"
+                                       href="{% url 'shop:product_list_by_category' sub.slug %}">
+                                        {{ sub.name }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <a href="{% url 'shop:product_list_by_category' c.slug %}"
+                           class="btn btn-category {% if category.slug == c.slug %}btn-primary text-white{% else %}bg-white text-dark shadow-sm{% endif %}">
+                            {{ c.name }}
+                        </a>
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
 
-        <!-- Products Grid -->
+        <!-- Products Grid (Full Width) -->
         <div class="row g-4 mb-5">
             {% for product in products %}
                 <div class="col-6 col-md-4 col-lg-3">
@@ -126,7 +220,7 @@
     <!-- Footer -->
     <footer class="bg-dark text-light py-4 mt-auto">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Mens Shop. All Rights Reserved.</p>
+            <p class="mb-0">&copy; 2026 Status. All Rights Reserved.</p>
             <small class="text-muted">Automated Order Management System</small>
         </div>
     </footer>

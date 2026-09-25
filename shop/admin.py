@@ -5,14 +5,20 @@ from .models import Category, Product, Order, OrderItem
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug', 'parent']
     prepopulated_fields = {'slug': ('name',)}
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == 'parent':
+
+            kwargs['queryset'] = Category.objects.filter(parent__isnull=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price', 'stock', 'available', 'created']
-    list_filter = ['available', 'created']
+    # 'size' field list_display madhye add keli ahe
+    list_display = ['name', 'category', 'size', 'price', 'stock', 'available', 'created']
+    list_filter = ['available', 'category', 'size', 'created']
     list_editable = ['price', 'stock', 'available']
     prepopulated_fields = {'slug': ('name',)}
 
