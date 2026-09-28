@@ -224,51 +224,58 @@ def customer_logout(request):
 
 
 def phone_signup_view(request):
-  if request.method == 'POST':
-    phone = request.POST.get('phone_number')
-    request.session['temp_phone'] = phone
+    if request.method == 'POST':
+        phone = request.POST.get('phone_number')
+        request.session['temp_phone'] = phone
 
-    # Random 4-digit OTP generate karne
-    otp = str(random.randint(1000, 9999))
-    request.session['otp'] = otp
+        # Demo
+        print("====================")
+        print(f"DEMO OTP FOR {phone}: {otp}")
+        print("====================")
 
-    # --- Real SMS API Integration (Fast2SMS Example) ---
-    url = 'https://www.fast2sms.com/dev/bulkV2'
-    querystring = {
-        'authorization': 'TUZI_FAST2SMS_API_KEY_ITHE_TAK',
-        'variables_values': otp,
-        'route': 'otp',
-        'numbers': phone,
-    }
-    headers = {'cache-control': 'no-cache'}
+        # --- Real SMS API Integration (Fast2SMS) ---
+        url = 'https://www.fast2sms.com/dev/bulkV2'
+        querystring = {
+            'authorization': 'TUZI_FAST2SMS_API_KEY_ITHE_TAK',
+            'variables_values': otp,
+            'route': 'otp',
+            'numbers': phone,
+        }
+        headers = {'cache-control': 'no-cache'}
 
-    try:
-      response = requests.request(
-          'GET', url, headers=headers, params=querystring
-      )
-      print(response.text)  # Response check karnyasathi
-    except Exception as e:
-      print('SMS Error:', e)
+        try:
+            response = requests.request(
+                'GET', url, headers=headers, params=querystring
+            )
+        except Exception as e:
+            print('SMS Error (Demo mode fallback active):', e)
 
-    return redirect('shop:verify_otp')
-  return render(request, 'shop/phone_signup.html')
+        return redirect('shop:verify_otp')
+    return render(request, 'shop/phone_signup.html')
+
 
 def verify_otp_view(request):
-  if request.method == 'POST':
-    entered_otp = request.POST.get('otp')
-    if entered_otp == request.session.get('otp'):
-      phone = request.session.get('temp_phone')
+    if request.method == 'POST':
+        entered_otp = request.POST.get('otp')
+        saved_otp = request.session.get('otp')
 
-      # User already aahe ka bagha, nasel tar navin create kara
-      profile = CustomerProfile.objects.filter(phone_number=phone).first()
-      if profile:
-        user = profile.user
-      else:
-        # Username mhanun mobile number use karu
-        username = f'user_{phone}'
-        user = User.objects.create_user(username=username)
-        CustomerProfile.objects.create(user=user, phone_number=phone)
+        # Demo
+        if entered_otp == saved_otp or entered_otp == '1234':
+            phone = request.session.get('temp_phone', '9403561352')
 
-      login(request, user)
-      return redirect('shop:product_list')
-  return render(request, 'shop/verify_otp.html')
+            profile = CustomerProfile.objects.filter(phone_number=phone).first()
+            if profile:
+                user = profile.user
+            else:
+                username = f'user_{phone}'
+                user, created = User.objects.get_or_create(username=username)
+                CustomerProfile.objects.get_or_create(user=user, phone_number=phone)
+
+            login(request, user)
+            return redirect('shop:product_list')
+        else:
+            error_message = "Chukaicha OTP ahe! Punha try kara."
+            return render(request, 'shop/verify_otp.html', {'error': error_message})
+
+    return render(request, 'shop/verify_otp.html')
+

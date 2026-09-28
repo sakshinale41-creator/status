@@ -76,3 +76,12 @@ class CustomerProfile(models.Model):
 
     def __str__(self):
         return self.phone_number
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+    color_name = models.CharField(max_length=50, blank=True, null=True)  # Udaharanarth: Red, Blue, Black
+    image = models.ImageField(upload_to='products/variants/')
+
+    def __str__(self):
+        return f"{self.product.name} - {self.color_name}"

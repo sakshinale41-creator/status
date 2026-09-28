@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db.models import Sum
-from .models import Category, Product, Order, OrderItem
+from .models import Category, Product, Order, OrderItem, ProductImage
 
 
 @admin.register(Category)
@@ -10,17 +10,22 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'parent':
-
             kwargs['queryset'] = Category.objects.filter(parent__isnull=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 3  # Eka veles 3 extra image fields distil
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # 'size' field list_display madhye add keli ahe
     list_display = ['name', 'category', 'size', 'price', 'stock', 'available', 'created']
     list_filter = ['available', 'category', 'size', 'created']
     list_editable = ['price', 'stock', 'available']
     prepopulated_fields = {'slug': ('name',)}
+    inlines = [ProductImageInline]
 
 
 class OrderItemInline(admin.TabularInline):
