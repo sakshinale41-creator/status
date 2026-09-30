@@ -1,54 +1,103 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | Mens Shop</title>
+    <title>Checkout | Status Men's Wear</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+        }
+        .navbar {
+            background-color: #c4a47c !important;
+            border-bottom: 1px solid #b39268;
+        }
+        .navbar-brand {
+            color: #1e3a8a !important;
+            font-weight: 700;
+        }
+        .card {
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.75rem;
+            background-color: #ffffff;
+        }
+        /* 'Buy Now' button sarkha exact dark blue color */
+        .btn-primary-custom {
+            background-color: #1e3a8a;
+            border-color: #1e3a8a;
+            color: white;
+        }
+        .btn-primary-custom:hover {
+            background-color: #172554;
+            border-color: #172554;
+            color: white;
+        }
+    </style>
 </head>
-<body class="bg-light">
+<body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="{% url 'shop:product_list' %}">
-                <i class="bi bi-bag-heart-fill text-primary me-2"></i>Mens Shop
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3">
+        <div class="container position-relative">
+            <!-- Back to Shop / Dashboard Button -->
+            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                <i class="bi bi-arrow-left me-1"></i> Back to Shop
             </a>
-            <a href="{% url 'shop:cart_detail' %}" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-cart3 me-1"></i> Back to Cart
+            <!-- Centered Brand Name -->
+            <a class="navbar-brand fs-3 position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}">
+                Status
             </a>
         </div>
     </nav>
 
-    <!-- Checkout Form -->
+    <!-- Checkout Form Section -->
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 p-4">
-                    <h3 class="fw-bold mb-4"><i class="bi bi-receipt me-2"></i>Checkout Details</h3>
+                <div class="card p-4 p-md-5">
+                    <h3 class="fw-bold mb-4 text-dark"><i class="bi bi-receipt me-2 text-primary"></i>Checkout Details</h3>
 
                     <form method="POST">
                         {% csrf_token %}
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Full Name</label>
-                                <input type="text" name="first_name" class="form-control" placeholder="John Doe" required>
+                                <label class="form-label fw-semibold text-secondary">Full Name</label>
+                                <input type="text" name="first_name" class="form-control form-control-lg fs-6" placeholder="Enter your full name" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Phone Number</label>
-                                <input type="tel" name="phone" class="form-control" placeholder="10-digit mobile number" required>
+                                <label class="form-label fw-semibold text-secondary">Phone Number</label>
+                                <input type="tel" name="phone" class="form-control form-control-lg fs-6" placeholder="10-digit mobile number" required>
                             </div>
                             <div class="col-12">
-                                <label class="form-label fw-semibold">Delivery Address</label>
-                                <textarea name="address" class="form-control" rows="3" placeholder="Flat, Street, Area, City, Pincode" required></textarea>
+                                <label class="form-label fw-semibold text-secondary">Delivery Address</label>
+                                <textarea name="address" class="form-control fs-6" rows="3" placeholder="Flat, Street, Area, City" required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary">Pincode</label>
+                                <input type="text" name="pincode" class="form-control form-control-lg fs-6" placeholder="6-digit pincode" required>
                             </div>
                         </div>
 
                         <hr class="my-4">
 
-                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold rounded-3">
-                            <i class="bi bi-check-circle me-2"></i> Place Order Now
+                        <!-- Payment Method Section -->
+                        <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-credit-card me-2 text-primary"></i>Payment Method</h5>
+                        <div class="mb-4">
+                            <div class="form-check p-3 border rounded-3 bg-light">
+                                <input class="form-check-input ms-1" type="radio" name="payment_method" id="onlinePay" value="Online" checked>
+                                <label class="form-check-label fw-semibold ms-2 text-dark" for="onlinePay">
+                                    <i class="bi bi-shield-check text-success me-1"></i> Online Payment (UPI / QR / NetBanking / Cards)
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom btn-lg w-100 fw-bold rounded-3 shadow-sm py-3">
+                            <i class="bi bi-check-circle me-2"></i> Proceed to Pay & Place Order
                         </button>
                     </form>
                 </div>
@@ -57,9 +106,9 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-auto">
+    <footer class="bg-white border-top text-dark py-4 mt-auto">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Mens Shop. All Rights Reserved.</p>
+            <p class="mb-0 text-muted">&copy; 2026 Status Men's Wear. All Rights Reserved.</p>
         </div>
     </footer>
 

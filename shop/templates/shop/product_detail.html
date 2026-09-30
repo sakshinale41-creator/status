@@ -90,7 +90,7 @@
                             </a>
                         </div>
                         <div class="col-6">
-                            <a href="{% url 'shop:checkout' %}" class="btn btn-buy w-100 d-flex align-items-center justify-content-center gap-2">
+                            <a href="{% url 'shop:buy_now' product.id %}?size=S" id="buy-now-btn" class="btn btn-buy w-100 d-flex align-items-center justify-content-center gap-2">
                                 <i class="bi bi-lightning-charge-fill"></i> Buy Now
                             </a>
                         </div>
@@ -109,11 +109,13 @@
     </div>
 
     <script>
-        // JavaScript for Size selection
         const sizeButtons = document.querySelectorAll('.size-btn');
         const selectedSizeText = document.getElementById('selected-size-text');
         const addToCartBtn = document.getElementById('add-to-cart-btn');
-        const baseUrl = "{% url 'shop:add_to_cart' product.id %}";
+        const buyNowBtn = document.getElementById('buy-now-btn');
+
+        const cartBaseUrl = "{% url 'shop:add_to_cart' product.id %}";
+        const buyNowBaseUrl = "{% url 'shop:buy_now' product.id %}";
 
         let currentSize = 'S';
 
@@ -123,7 +125,7 @@
                 this.classList.add('active');
                 currentSize = this.getAttribute('data-size');
                 selectedSizeText.textContent = currentSize;
-                updateCartUrl();
+                updateActionUrls();
             });
         });
 
@@ -145,8 +147,9 @@
             });
         });
 
-        function updateCartUrl() {
-            addToCartBtn.href = `${baseUrl}?size=${currentSize}`;
+        function updateActionUrls() {
+            addToCartBtn.href = `${cartBaseUrl}?size=${currentSize}`;
+            buyNowBtn.href = `${buyNowBaseUrl}?size=${currentSize}`;
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

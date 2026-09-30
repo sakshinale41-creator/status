@@ -102,7 +102,9 @@ def cart_detail(request):
 
     for p_id, item in cart_data.items():
         try:
-            product = Product.objects.get(id=int(p_id))
+            # Clean p_id to handle formats like '2_S'
+            clean_id = int(str(p_id).split('_')[0])
+            product = Product.objects.get(id=clean_id)
             item_total = float(item['price']) * item['quantity']
             total_price += item_total
             cart_items.append({
@@ -111,7 +113,7 @@ def cart_detail(request):
                 'price': item['price'],
                 'total_price': item_total,
             })
-        except Product.DoesNotExist:
+        except (Product.DoesNotExist, ValueError):
             continue
 
     context = {
@@ -123,31 +125,29 @@ def cart_detail(request):
 
 def checkout(request):
     cart = request.session.get('cart', {})
-    if not cart:
-        return redirect('shop:product_list')
 
     if request.method == 'POST':
-        name = request.POST.get('first_name')
-        phone = request.POST.get('phone')
+        full_name = request.POST.get('first_name')
+        phone_number = request.POST.get('phone')
         address = request.POST.get('address')
-        pincode = request.POST.get('pincode', '000000')  # Default value format saathi
+        pincode = request.POST.get('pincode')  # Pincode get kela
+        payment_method = request.POST.get('payment_method', 'Online')
 
-        # Total Price Calculate kara
-        total_price = sum(float(item['price']) * item['quantity'] for item in cart.values())
+        total_amount = sum(float(item['price']) * item['quantity'] for item in cart.values())
 
-        # Exact model fields map karun Order create kara:
+        # Order create kara
         order = Order.objects.create(
-            full_name=name,
-            phone_number=phone,
+            full_name=full_name,
+            phone_number=phone_number,
             address=address,
             pincode=pincode,
-            total_amount=total_price,
-            status='Pending'
+            total_amount=total_amount,
+            payment_method=payment_method
         )
 
-        # Order Items save kara ani Product Stock kam kara
-        for item_id, item_data in cart.items():
-            product = get_object_or_404(Product, id=item_id)
+        for item_key, item_data in cart.items():
+            product_id = item_data.get('product_id')
+            product = get_object_or_404(Product, id=product_id)
 
             OrderItem.objects.create(
                 order=order,
@@ -156,20 +156,14 @@ def checkout(request):
                 quantity=item_data['quantity']
             )
 
-            # Stock automatic minus kara
-            if product.stock >= item_data['quantity']:
-                product.stock -= item_data['quantity']
-                if product.stock == 0:
-                    product.available = False
-                product.save()
-
-        # Session cart clear kara
+        # Cart clear kara
         request.session['cart'] = {}
         request.session.modified = True
 
-        return render(request, 'shop/order_success.html', {'order': order})
+        # Online payment sathi payment page var redirect kru shakta (kinva direct success jar QR/Mock payment asel)
+        return redirect('shop:payment', order_id=order.id)
 
-    return render(request, 'shop/checkout.html')
+    return render(request, 'shop/checkout.html', {'cart': cart})
 
 
 def track_order(request):
@@ -228,6 +222,10 @@ def phone_signup_view(request):
         phone = request.POST.get('phone_number')
         request.session['temp_phone'] = phone
 
+        # Random 4-digit OTP generate kara ani session madhe store kara
+        otp = str(random.randint(1000, 9999))
+        request.session['otp'] = otp
+
         # Demo
         print("====================")
         print(f"DEMO OTP FOR {phone}: {otp}")
@@ -252,7 +250,6 @@ def phone_signup_view(request):
 
         return redirect('shop:verify_otp')
     return render(request, 'shop/phone_signup.html')
-
 
 def verify_otp_view(request):
     if request.method == 'POST':
@@ -279,3 +276,38 @@ def verify_otp_view(request):
 
     return render(request, 'shop/verify_otp.html')
 
+
+def buy_now(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    selected_size = request.GET.get('size', 'S')
+
+    cart = request.session.get('cart', {})
+    if not isinstance(cart, dict):
+        cart = {}
+
+    cart_item_key = f"{product.id}_{selected_size}"
+    cart[cart_item_key] = {
+        'product_id': product.id,
+        'quantity': 1,
+        'price': str(product.price),
+        'name': product.name,
+        'size': selected_size,
+    }
+    request.session['cart'] = cart
+    request.session.modified = True
+
+    return redirect('shop:checkout')
+
+def order_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'shop/order_success.html', {'order': order})
+
+
+def payment_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    if request.method == 'POST':
+        # Ithe order status update karun pudhe redirect karayche
+        return redirect('shop:order_success', order_id=order.id)
+
+    context = {'order': order}
+    return render(request, 'shop/payment.html', context)

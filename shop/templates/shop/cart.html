@@ -1,22 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart | Mens Shop</title>
+    <title>Shopping Cart | Status Men's Wear</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .btn-theme-primary {
+            background-color: #1e3a8a !important;
+            border-color: #1e3a8a !important;
+            color: white !important;
+        }
+        .btn-theme-primary:hover {
+            background-color: #172554 !important;
+            border-color: #172554 !important;
+            color: white !important;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="{% url 'shop:product_list' %}">
-                <i class="bi bi-bag-heart-fill text-primary me-2"></i>Mens Shop
+    <!-- Navbar with Brown Background -->
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3 border-bottom" style="background-color: #c4a47c !important;">
+        <div class="container position-relative">
+            <!-- Store Button -->
+            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
+                <i class="bi bi-shop me-1"></i> Store
             </a>
+            <!-- Centered Brand Name -->
+            <a class="navbar-brand fs-3 fw-bold position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}" style="color: #1e3a8a !important;">
+                Status
+            </a>
+            <!-- Cart Button / Admin Login -->
             <div class="d-flex align-items-center gap-2">
-                <a href="/admin" class="btn btn-outline-light btn-sm" target="_blank">
+                <a href="/admin" class="btn btn-outline-dark btn-sm rounded-pill px-3" target="_blank">
                     <i class="bi bi-person-lock me-1"></i> Admin Login
                 </a>
             </div>
@@ -26,9 +49,9 @@
     <!-- Cart Content -->
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold mb-0"><i class="bi bi-cart3 me-2"></i>Your Shopping Cart</h2>
-            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Continue Shopping
+            <h2 class="fw-bold mb-0 text-dark"><i class="bi bi-cart3 me-2 text-primary"></i>Your Shopping Cart</h2>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                <i class="bi bi-arrow-left me-1"></i> Continue Shopping
             </a>
         </div>
 
@@ -36,7 +59,7 @@
             <div class="row g-4">
                 <!-- Cart Items Table -->
                 <div class="col-lg-8">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
                         <div class="table-responsive">
                             <table class="table align-middle mb-0">
                                 <thead class="table-light">
@@ -60,7 +83,7 @@
                                                             <i class="bi bi-image"></i>
                                                         </div>
                                                     {% endif %}
-                                                    <span class="fw-semibold">{{ item.product.name }}</span>
+                                                    <span class="fw-semibold text-dark">{{ item.product.name }}</span>
                                                 </div>
                                             </td>
                                             <td>₹{{ item.price }}</td>
@@ -81,8 +104,8 @@
 
                 <!-- Order Summary -->
                 <div class="col-lg-4">
-                    <div class="card border-0 shadow-sm rounded-4 p-4">
-                        <h4 class="fw-bold mb-3">Order Summary</h4>
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                        <h4 class="fw-bold mb-3 text-dark">Order Summary</h4>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Total Amount</span>
                             <span class="fw-bold text-success fs-5">
@@ -94,7 +117,7 @@
                             </span>
                         </div>
                         <hr>
-                        <a href="{% url 'shop:checkout' %}" class="btn btn-primary btn-lg w-100 fw-bold rounded-3">
+                        <a href="{% url 'shop:checkout' %}" class="btn btn-theme-primary btn-lg w-100 fw-bold rounded-3 shadow-sm">
                             <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
                         </a>
                     </div>
@@ -102,12 +125,12 @@
             </div>
         {% else %}
             <!-- Empty Cart View -->
-            <div class="card border-0 shadow-sm rounded-4 text-center py-5">
+            <div class="card border-0 shadow-sm rounded-4 text-center py-5 bg-white">
                 <div class="card-body">
                     <i class="bi bi-cart-x text-muted fs-1 mb-3"></i>
                     <h4 class="fw-bold text-secondary">Your cart is empty</h4>
                     <p class="text-muted mb-4">Looks like you haven't added anything to your cart yet.</p>
-                    <a href="{% url 'shop:product_list' %}" class="btn btn-primary btn-lg fw-bold rounded-3">
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-theme-primary btn-lg fw-bold rounded-3 px-4 shadow-sm">
                         Start Shopping
                     </a>
                 </div>
@@ -116,9 +139,9 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-auto">
+    <footer class="bg-white border-top text-dark py-4 mt-auto">
         <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Mens Shop. All Rights Reserved.</p>
+            <p class="mb-0 text-muted">&copy; 2026 Status Men's Wear. All Rights Reserved.</p>
         </div>
     </footer>
 

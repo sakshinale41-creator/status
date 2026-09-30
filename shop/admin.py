@@ -5,24 +5,19 @@ from .models import Category, Product, Order, OrderItem, ProductImage
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'parent']
+    list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == 'parent':
-            kwargs['queryset'] = Category.objects.filter(parent__isnull=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 3  # Eka veles 3 extra image fields distil
+    extra = 3
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'size', 'price', 'stock', 'available', 'created']
-    list_filter = ['available', 'category', 'size', 'created']
+    list_display = ['name', 'category', 'price', 'stock', 'available', 'created']
+    list_filter = ['available', 'category', 'created']
     list_editable = ['price', 'stock', 'available']
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline]
@@ -35,13 +30,11 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    # Live Order Details & Single-click Status Update
     list_display = ['id', 'full_name', 'phone_number', 'total_amount', 'status', 'created_at']
     list_filter = ['status', 'created_at']
-    list_editable = ['status']  # Pending -> Processing -> Shipped -> Delivered
+    list_editable = ['status']
     inlines = [OrderItemInline]
 
-    # Simple Sales Analytics on Admin Dashboard
     def changelist_view(self, request, extra_context=None):
         total_earnings = Order.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
         total_orders = Order.objects.count()

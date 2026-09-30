@@ -48,12 +48,19 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
 class Order(models.Model):
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
     address = models.TextField()
     pincode = models.CharField(max_length=10)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # Navin payment fields add kara:
+    payment_method = models.CharField(max_length=50, default='Online Payment')
+    is_paid = models.BooleanField(default=False)
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default='Pending')
 

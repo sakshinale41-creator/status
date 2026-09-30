@@ -18,5 +18,8 @@ urlpatterns = [
     path('verify-otp/', views.verify_otp_view, name='verify_otp'),
     path('logout/', views.customer_logout, name='logout'),
     path('track-order/', views.profile, name='track_order'),
+    path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
+    path('order-success/<int:order_id>/', views.order_success, name='order_success'),
+    path('payment/<int:order_id>/', views.payment_view, name='payment'),
 
 ]
