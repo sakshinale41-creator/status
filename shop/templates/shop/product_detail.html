@@ -18,6 +18,12 @@
         .btn-cart:hover { background-color: #f0f4f8; color: #174A8B; }
         .btn-buy { background-color: #174A8B; color: #fff; font-weight: 600; border-radius: 8px; padding: 12px; border: none; }
         .btn-buy:hover { background-color: #12376d; color: #fff; }
+
+        /* Mobile responsiveness adjustments */
+        @media (max-width: 768px) {
+            .main-img { height: 320px; }
+            .navbar-brand { font-size: 1.8rem !important; }
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -36,10 +42,10 @@
     </nav>
 
     <!-- Product Detail Section -->
-    <div class="container my-5">
-        <div class="row g-5">
+    <div class="container my-4 my-md-5">
+        <div class="row g-4 g-md-5">
             <!-- Left Side: Product Image -->
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <div class="card border-0 shadow-sm p-3 bg-white rounded-4">
                     {% if product.image %}
                         <img src="{{ product.image.url }}" class="card-img-top main-img" alt="{{ product.name }}">
@@ -50,8 +56,8 @@
             </div>
 
             <!-- Right Side: Details & Actions -->
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm p-4 bg-white rounded-4">
+            <div class="col-12 col-md-6">
+                <div class="card border-0 shadow-sm p-3 p-md-4 bg-white rounded-4">
                     <h2 class="fw-bold text-dark fs-3 mb-2">{{ product.name }}</h2>
                     <h3 class="fw-bold text-primary mb-4">₹{{ product.price }}</h3>
 
