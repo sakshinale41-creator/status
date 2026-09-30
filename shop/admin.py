@@ -8,7 +8,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
 
-
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 3
@@ -17,10 +16,8 @@ class ProductImageInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'price', 'stock', 'available', 'created']
-    list_filter = ['available', 'category', 'created']
+    list_filter = ['available', 'created', 'category']
     list_editable = ['price', 'stock', 'available']
-    prepopulated_fields = {'slug': ('name',)}
-    inlines = [ProductImageInline]
 
 
 class OrderItemInline(admin.TabularInline):
