@@ -52,8 +52,8 @@ def product_list(request, category_slug=None):
     })
 
 
-def product_detail(request, id, slug):
-    product = get_object_or_404(Product, id=id, slug=slug)
+def product_detail(request, pk):    # इथे pk किंवा id असणे गरजेचे आहे
+    product = get_object_or_404(Product, pk=pk)
     return render(request, 'shop/product_detail.html', {'product': product})
 
 
