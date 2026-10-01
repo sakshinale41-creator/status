@@ -63,6 +63,21 @@
             padding: 6px 16px;
             font-weight: 500;
             font-size: 0.95rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Feature 1: Horizontal Scrollable Category Pills (Amazon/Flipkart style) */
+        .category-scroll {
+            display: flex;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            gap: 10px;
+            padding-bottom: 8px;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+        }
+        .category-scroll::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
         }
 
         /* Mobile Responsive Adjustments */
@@ -196,8 +211,8 @@
 
     <!-- Main Content -->
     <div class="container py-2">
-        <!-- Horizontal Categories Navigation -->
-        <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
+        <!-- Feature 1: Horizontal Scrollable Categories Navigation -->
+        <div class="category-scroll mb-4">
             {% for c in categories %}
                 <div class="dropdown">
                     {% if c.subcategories.exists %}
@@ -254,19 +269,35 @@
                                 {% endif %}
                             </div>
 
+                            <!-- Feature 2: Quick Action Buttons (View + Quick Cart Icon) on Product Card -->
                             <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
                                 <span class="fs-6 fs-md-5 fw-bold text-primary">₹{{ product.price }}</span>
-                                <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-2 px-md-3">
-                                    View
-                                </a>
+                                <div class="d-flex gap-1">
+                                    <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-2" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-primary rounded-pill px-2" style="background-color: #174A8B; border: none;" title="Quick View & Add">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             {% empty %}
+                <!-- Feature 3: Smart Empty Search Result with Quick Popular Suggestions -->
                 <div class="col-12 text-center py-5">
-                    <i class="bi bi-box-seam fs-1 text-muted"></i>
-                    <p class="text-muted mt-2">No products available in this category.</p>
+                    <div class="mb-3">
+                        <i class="bi bi-search fs-1 text-muted"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">No products found</h5>
+                    <p class="text-muted mb-3">We couldn't find what you were looking for. Try searching for popular items like:</p>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <a href="{% url 'shop:product_list' %}?q=Kurta" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Kurta</a>
+                        <a href="{% url 'shop:product_list' %}?q=Jeans" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Jeans</a>
+                        <a href="{% url 'shop:product_list' %}?q=Shirt" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Shirts</a>
+                        <a href="{% url 'shop:product_list' %}?q=Trousers" class="btn btn-sm btn-outline-secondary rounded-pill px-3">Trousers</a>
+                    </div>
                 </div>
             {% endfor %}
         </div>
