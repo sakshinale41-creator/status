@@ -67,17 +67,28 @@
             flex-shrink: 0;
         }
 
-        /* Horizontal Scrollable Category Pills */
+        /* Horizontal Scrollable Category Pills - Fix with visible overflow */
         .category-scroll {
             display: flex;
-            overflow-x: auto;
-            flex-wrap: nowrap;
+            overflow-x: visible !important;
+            overflow-y: visible !important;
+            flex-wrap: wrap;
             gap: 10px;
             padding-bottom: 8px;
-            scrollbar-width: none;
         }
-        .category-scroll::-webkit-scrollbar {
-            display: none;
+
+        /* Dropdown positioning fix */
+        .category-scroll .dropdown {
+            position: relative !important;
+        }
+        .category-scroll .dropdown-menu {
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            margin-top: 5px !important;
+            z-index: 9999 !important;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
         }
 
         /* Mobile Responsive Adjustments */

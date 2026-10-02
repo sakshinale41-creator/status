@@ -20,6 +20,7 @@ class Category(models.Model):
             return f"{self.parent.name} --> {self.name}"
         return self.name
 
+
 class Product(models.Model):
     SIZE_CHOICES = (
         ('S', 'S'),
@@ -37,7 +38,9 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     stock = models.PositiveIntegerField(default=10)
     created = models.DateTimeField(auto_now_add=True)
-    size = models.CharField(max_length=5, choices=SIZE_CHOICES, blank=True, null=True)
+
+    # Hya field madhe multiple sizes save hotil (e.g. "S, M, L")
+    size = models.CharField(max_length=50, blank=True, null=True, help_text="Select available sizes")
 
     def __str__(self):
         return self.name

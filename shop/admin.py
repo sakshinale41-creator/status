@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Sum
+from django import forms
 from .models import Category, Product, Order, OrderItem, ProductImage
 
 
@@ -8,16 +9,54 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
 
+
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 3
 
 
+# Product admin sathi custom form (checkboxes sathi)
+class ProductAdminForm(forms.ModelForm):
+    SIZE_CHOICES = [
+        ('S', 'S'),
+        ('M', 'M'),
+        ('L', 'L'),
+        ('XL', 'XL'),
+        ('XXL', 'XXL'),
+    ]
+
+    # Multiple checkboxes sathi field define keli
+    size = forms.MultipleChoiceField(
+        choices=SIZE_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Jar aadhi data madhe size asel, tila comma-separated madhun list madhe convert karun form madhe daakhva
+        if self.instance and self.instance.size:
+            self.initial['size'] = [s.strip() for s in self.instance.size.split(',')]
+
+    def clean_size(self):
+        # Checkboxes che values comma-separated string madhe store karnyasathi
+        sizes = self.cleaned_data.get('size')
+        if sizes:
+            return ", ".join(sizes)
+        return ""
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    form = ProductAdminForm  # He custom form aapan product admin la dila
     list_display = ['name', 'category', 'price', 'stock', 'available', 'created']
     list_filter = ['available', 'created', 'category']
     list_editable = ['price', 'stock', 'available']
+    inlines = [ProductImageInline]
 
 
 class OrderItemInline(admin.TabularInline):
