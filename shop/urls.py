@@ -4,7 +4,10 @@ from . import views
 app_name = 'shop'
 
 urlpatterns = [
+
     path('', views.product_list, name='product_list'),
+
+    # Baki sagle paths tasech thev
     path('category/<slug:category_slug>/', views.product_list, name='product_list_by_category'),
     path('product/<int:pk>/', views.product_detail, name='product_detail'),
     path('cart/', views.cart_detail, name='cart_detail'),
@@ -21,5 +24,4 @@ urlpatterns = [
     path('buy-now/<int:product_id>/', views.buy_now, name='buy_now'),
     path('order-success/<int:order_id>/', views.order_success, name='order_success'),
     path('payment/<int:order_id>/', views.payment_view, name='payment'),
-
 ]

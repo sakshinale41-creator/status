@@ -311,3 +311,6 @@ def payment_view(request, order_id):
 
     context = {'order': order}
     return render(request, 'shop/payment.html', context)
+
+def landing_page(request):
+    return render(request, 'shop/landing.html')
