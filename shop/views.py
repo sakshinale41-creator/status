@@ -24,32 +24,30 @@ def save_cart(request, cart):
 
 def product_list(request, category_slug=None):
     category = None
-    categories = Category.objects.filter(parent__isnull=True)
-    products = Product.objects.all()
-
-    # Search query filter
-    query = request.GET.get('q')
-    if query:
-        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    categories = Category.objects.filter(parent=None)  # Parent categories sathi
+    products = Product.objects.filter(available=True)
 
     if category_slug:
         category = get_object_or_404(Category, slug=category_slug)
-        # Hya category che ani tichya subcategories che products fetch kara
+
+        # Jar tya category la subcategories astil, tar parent + subcategories doghanchi products dakhav
         subcategories = category.subcategories.all()
         if subcategories.exists():
-            # Jar parent category asel tar tiche ani subcategories che sagale products dakhav
-            category_list = [category] + list(subcategories)
-            products = products.filter(category__in=category_list)
+            products = products.filter(Q(category=category) | Q(category__in=subcategories))
         else:
-            # Jar subcategory asel tar fakt tya category che products dakhav
             products = products.filter(category=category)
 
-    return render(request, 'shop/product_list.html', {
+    # Query search asel tar filter karne...
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(name__icontains=query)
+
+    context = {
         'category': category,
         'categories': categories,
         'products': products,
-        'query': query,
-    })
+    }
+    return render(request, 'shop/product_list.html', context)
 
 
 def product_detail(request, pk):    # इथे pk किंवा id असणे गरजेचे आहे
