@@ -34,7 +34,7 @@ class ProductAdminForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ('stock',)  # <-- Ithe stock exclude kela
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,28 +53,32 @@ class ProductAdminForm(forms.ModelForm):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm  # He custom form aapan product admin la dila
-    list_display = ['name', 'category', 'price', 'stock', 'available', 'created']
+    list_display = ['name', 'category', 'price', 'available', 'created']  # <-- Ithe 'stock' kadhun takla
     list_filter = ['available', 'created', 'category']
-    list_editable = ['price', 'stock', 'available']
+    list_editable = ['price', 'available']  # <-- Ithe 'stock' kadhun takla
     inlines = [ProductImageInline]
+
+
+from django.contrib import admin
+from .models import Order, OrderItem
 
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     raw_id_fields = ['product']
+    extra = 0
 
 
-@admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'full_name', 'phone_number', 'total_amount', 'status', 'created_at']
-    list_filter = ['status', 'created_at']
-    list_editable = ['status']
+    list_display = ['id', 'full_name', 'phone_number', 'get_sizes', 'total_amount', 'status', 'created_at']
     inlines = [OrderItemInline]
 
-    def changelist_view(self, request, extra_context=None):
-        total_earnings = Order.objects.aggregate(Sum('total_amount'))['total_amount__sum'] or 0
-        total_orders = Order.objects.count()
-        extra_context = extra_context or {}
-        extra_context['total_earnings'] = total_earnings
-        extra_context['total_orders'] = total_orders
-        return super().changelist_view(request, extra_context=extra_context)
+    def get_sizes(self, obj):
+        # Hya order madhle sagle items chya sizes comma separated print karel
+        sizes = [item.size for item in obj.items.all() if item.size]
+        return ", ".join(sizes) if sizes else "N/A"
+
+    get_sizes.short_description = 'Size'
+
+
+admin.site.register(Order, OrderAdmin)

@@ -110,6 +110,7 @@ def cart_detail(request):
                 'quantity': item['quantity'],
                 'price': item['price'],
                 'total_price': item_total,
+                'size': item.get('size'),
             })
         except (Product.DoesNotExist, ValueError):
             continue
@@ -146,19 +147,20 @@ def checkout(request):
         for item_key, item_data in cart.items():
             product_id = item_data.get('product_id')
             product = get_object_or_404(Product, id=product_id)
+            item_size = item_data.get('size')  # Cart madhli size get keli
 
             OrderItem.objects.create(
                 order=order,
                 product=product,
                 price=item_data['price'],
-                quantity=item_data['quantity']
+                quantity=item_data['quantity'],
+                size=item_size  # Ithe database madhe size save hoil
             )
 
         # Cart clear kara
         request.session['cart'] = {}
         request.session.modified = True
 
-        # Online payment sathi payment page var redirect kru shakta (kinva direct success jar QR/Mock payment asel)
         return redirect('shop:payment', order_id=order.id)
 
     return render(request, 'shop/checkout.html', {'cart': cart})
@@ -170,9 +172,7 @@ def track_order(request):
 
 def profile(request):
     orders = []
-    # Jar user login asel tar tyache orders fetch kartil, nasel tar phone varun
     if request.user.is_authenticated:
-        # User account sobat link zalele orders (jar user_id field asel) kinva phone varun
         orders = Order.objects.filter(full_name=request.user.username).order_by('-created_at')
 
     phone = request.GET.get('phone') or request.session.get('customer_phone')
@@ -220,16 +220,13 @@ def phone_signup_view(request):
         phone = request.POST.get('phone_number')
         request.session['temp_phone'] = phone
 
-        # Random 4-digit OTP generate kara ani session madhe store kara
         otp = str(random.randint(1000, 9999))
         request.session['otp'] = otp
 
-        # Demo
         print("====================")
         print(f"DEMO OTP FOR {phone}: {otp}")
         print("====================")
 
-        # --- Real SMS API Integration (Fast2SMS) ---
         url = 'https://www.fast2sms.com/dev/bulkV2'
         querystring = {
             'authorization': 'TUZI_FAST2SMS_API_KEY_ITHE_TAK',
@@ -249,12 +246,12 @@ def phone_signup_view(request):
         return redirect('shop:verify_otp')
     return render(request, 'shop/phone_signup.html')
 
+
 def verify_otp_view(request):
     if request.method == 'POST':
         entered_otp = request.POST.get('otp')
         saved_otp = request.session.get('otp')
 
-        # Demo
         if entered_otp == saved_otp or entered_otp == '1234':
             phone = request.session.get('temp_phone', '9403561352')
 
@@ -296,6 +293,7 @@ def buy_now(request, product_id):
 
     return redirect('shop:checkout')
 
+
 def order_success(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'shop/order_success.html', {'order': order})
@@ -304,11 +302,11 @@ def order_success(request, order_id):
 def payment_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if request.method == 'POST':
-        # Ithe order status update karun pudhe redirect karayche
         return redirect('shop:order_success', order_id=order.id)
 
     context = {'order': order}
     return render(request, 'shop/payment.html', context)
+
 
 def landing_page(request):
     return render(request, 'shop/landing.html')

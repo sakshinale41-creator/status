@@ -76,15 +76,24 @@
                     </div>
                     {% endif %}
 
-                    <!-- Select Size Section -->
+                   <!-- Select Size Section -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold text-dark mb-2">Select Size: <span id="selected-size-text" class="text-primary">S</span></label>
+                        <label class="form-label fw-bold text-dark mb-2">Select Size: <span id="selected-size-text" class="text-primary">
+                            {% if product.size %}{{ product.size.split.0|cut:"," }}{% else %}S{% endif %}
+                        </span></label>
                         <div class="d-flex flex-wrap gap-2" id="size-container">
-                            <button type="button" class="size-btn active" data-size="S">S</button>
-                            <button type="button" class="size-btn" data-size="M">M</button>
-                            <button type="button" class="size-btn" data-size="L">L</button>
-                            <button type="button" class="size-btn" data-size="XL">XL</button>
-                            <button type="button" class="size-btn" data-size="XXL">XXL</button>
+                            {% if product.size %}
+                                <!-- Comma kadhun clean sizes sathi .split(',') vaparla ahe -->
+                                {% for s in product.size.split %}
+                                    {% with clean_s=s|cut:"," %}
+                                        {% if clean_s %}
+                                            <button type="button" class="size-btn {% if forloop.first %}active{% endif %}" data-size="{{ clean_s }}">{{ clean_s }}</button>
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted small">No size available</span>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -123,7 +132,8 @@
         const cartBaseUrl = "{% url 'shop:add_to_cart' product.id %}";
         const buyNowBaseUrl = "{% url 'shop:buy_now' product.id %}";
 
-        let currentSize = 'S';
+        // Jar sizes astil tar pahili size default ghene
+        let currentSize = sizeButtons.length > 0 ? sizeButtons[0].getAttribute('data-size') : 'S';
 
         sizeButtons.forEach(button => {
             button.addEventListener('click', function() {
@@ -154,9 +164,14 @@
         });
 
         function updateActionUrls() {
-            addToCartBtn.href = `${cartBaseUrl}?size=${currentSize}`;
-            buyNowBtn.href = `${buyNowBaseUrl}?size=${currentSize}`;
+            if(addToCartBtn && buyNowBtn) {
+                addToCartBtn.href = `${cartBaseUrl}?size=${currentSize}`;
+                buyNowBtn.href = `${buyNowBaseUrl}?size=${currentSize}`;
+            }
         }
+
+        // Initial call to set URL correctly
+        updateActionUrls();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
