@@ -37,11 +37,16 @@
                             </div>
                         {% endfor %}
 
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger py-2 small mt-2">
+                                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+
                         <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill mt-3 shadow-sm fw-semibold">Login</button>
                     </form>
 
                     <div class="text-center mt-4">
-                        <p class="small text-muted">Don't have an account? <a href="{% url 'shop:signup' %}" class="text-decoration-none fw-bold text-primary">Sign Up</a></p>
                         <a href="{% url 'shop:product_list' %}" class="small text-decoration-none text-secondary"><i class="bi bi-arrow-left"></i> Back to Store</a>
                     </div>
                 </div>
