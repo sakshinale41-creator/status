@@ -302,6 +302,10 @@ def order_success(request, order_id):
 def payment_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if request.method == 'POST':
+        # Customer ne paid kelyavar order status 'Pending' ch thevu shakto (admin verify karel)
+        # kinva is_paid = True karu shakto. Apan status 'Pending' thevu jyat mama verify karun 'Paid & Processing' karu sakel.
+        order.payment_method = 'UPI QR (GPay/PhonePe)'
+        order.save()
         return redirect('shop:order_success', order_id=order.id)
 
     context = {'order': order}
