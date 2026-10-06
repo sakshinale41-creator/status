@@ -34,7 +34,7 @@ class ProductAdminForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        exclude = ('stock',)  # <-- Ithe stock exclude kela
+        fields = '__all__'  # <-- Ithe sagle fields ghetlet, stock exclude kela navhay
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -54,11 +54,11 @@ class ProductAdminForm(forms.ModelForm):
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
     # 'stock' field list_display madhe add keli ahe, mhanje admin madhe stock disel
-    list_display = ['name', 'category', 'price', 'stock', 'available', 'created']
+    list_display = ['name', 'category', 'price', 'original_price', 'stock', 'available', 'created']
     search_fields = ('name',)
     list_filter = ['available', 'created', 'category']
     # list_editable madhe stock pan taku shaktees jyamule direct admin list madhun pan stock badalata yeil
-    list_editable = ['price', 'stock', 'available']
+    list_editable = ['price', 'original_price', 'stock', 'available']
     inlines = [ProductImageInline]
 
 

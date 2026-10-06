@@ -122,9 +122,9 @@ def cart_detail(request):
 
 
 def checkout(request):
-    # 1. Check if user is logged in before allowing checkout
+    # 1. Check if user is logged in before allowing checkout (with next parameter redirect)
     if not request.user.is_authenticated:
-        return redirect('shop:customer_login')
+        return redirect('/login/?next=/checkout/')
 
     cart = request.session.get('cart', {})
 
@@ -197,7 +197,6 @@ def customer_login(request):
         password = request.POST.get('password')
 
         user = None
-        # Jar userani input madhe '@' takla asel tar to email samjun user shootha
         if '@' in username_or_email:
             try:
                 matched_user = User.objects.get(email=username_or_email)
@@ -205,16 +204,24 @@ def customer_login(request):
             except User.DoesNotExist:
                 user = None
         else:
-            # Nahitar direct username varun authenticate kar
             user = authenticate(request, username=username_or_email, password=password)
 
         if user is not None:
             login(request, user)
+
+            # **Flow Fix:** Login zalyanantar 'next' URL check karun tithhe redirect karne
+            next_url = request.POST.get('next') or request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+
             return redirect('shop:profile')
         else:
             return render(request, 'shop/login.html', {'error': 'Invalid username/email or password.'})
 
-    return render(request, 'shop/login.html')
+    # GET request sathi 'next' value template la pass karne
+    next_url = request.GET.get('next', '')
+    return render(request, 'shop/login.html', {'next': next_url})
+
 
 def customer_logout(request):
     logout(request)
@@ -270,16 +277,13 @@ def register(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        # Check if passwords match
         if password != confirm_password:
             return render(request, 'shop/register.html', {'error': 'Passwords do not match!'})
 
-        # Check if username already exists
         if User.objects.filter(username=username).exists():
             return render(request, 'shop/register.html', {'error': 'Username already taken!'})
 
         try:
-            # Create the user
             user = User.objects.create_user(username=username, email=email, password=password)
             user.save()
             return redirect('shop:customer_login')

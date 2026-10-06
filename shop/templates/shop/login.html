@@ -108,6 +108,10 @@
         <form class="login-form" method="post">
             {% csrf_token %}
 
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
             <div class="form-group">
                 <label for="username">Username or Email</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
@@ -121,7 +125,7 @@
             <button type="submit">Login</button>
         </form>
 
-       <p class="register-text">Don't have an account? <a href="{% url 'shop:register' %}">Register</a></p>
+        <p class="register-text">Don't have an account? <a href="{% url 'shop:register' %}">Register</a></p>
     </div>
 </body>
 </html>
