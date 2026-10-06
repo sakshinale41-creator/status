@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from .models import CustomerProfile
+from django.contrib.auth import authenticate, login
 
 
 # Simple Session-based Cart Helpers
@@ -192,15 +193,28 @@ def profile(request):
 
 def customer_login(request):
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('shop:profile')  # Yethe direct profile/orders page la redirect hoil
-    else:
-        form = AuthenticationForm()
-    return render(request, 'shop/login.html', {'form': form})
+        username_or_email = request.POST.get('username')
+        password = request.POST.get('password')
 
+        user = None
+        # Jar userani input madhe '@' takla asel tar to email samjun user shootha
+        if '@' in username_or_email:
+            try:
+                matched_user = User.objects.get(email=username_or_email)
+                user = authenticate(request, username=matched_user.username, password=password)
+            except User.DoesNotExist:
+                user = None
+        else:
+            # Nahitar direct username varun authenticate kar
+            user = authenticate(request, username=username_or_email, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('shop:profile')
+        else:
+            return render(request, 'shop/login.html', {'error': 'Invalid username/email or password.'})
+
+    return render(request, 'shop/login.html')
 
 def customer_logout(request):
     logout(request)
@@ -247,3 +261,29 @@ def payment_view(request, order_id):
 
 def landing_page(request):
     return render(request, 'shop/landing.html')
+
+
+def register(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Check if passwords match
+        if password != confirm_password:
+            return render(request, 'shop/register.html', {'error': 'Passwords do not match!'})
+
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            return render(request, 'shop/register.html', {'error': 'Username already taken!'})
+
+        try:
+            # Create the user
+            user = User.objects.create_user(username=username, email=email, password=password)
+            user.save()
+            return redirect('shop:customer_login')
+        except Exception as e:
+            return render(request, 'shop/register.html', {'error': str(e)})
+
+    return render(request, 'shop/register.html')

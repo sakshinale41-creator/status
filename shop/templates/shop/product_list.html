@@ -137,16 +137,23 @@
                     <div class="dropdown">
                         <a href="#" class="text-dark text-decoration-none d-flex flex-column align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-person-circle fs-5"></i>
-                            <span class="small fw-medium" style="font-size: 0.75rem;">
-                                {% if request.user.is_authenticated %}User{% else %}Profile{% endif %}
+                            <span class="small fw-medium text-truncate" style="font-size: 0.75rem; max-width: 90px;">
+                                {% if request.user.is_authenticated %}{{ request.user.username }}{% else %}Profile{% endif %}
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0 py-2" style="width: 220px;">
                             {% if request.user.is_authenticated %}
-                                <li class="px-3 py-1 mb-2">
-                                    <span class="d-block text-muted small">Hello,</span>
-                                    <span class="fw-bold small">User</span>
-                                </li>
+                                {% if request.user.is_authenticated %}
+                                    <li class="px-3 py-1 mb-2">
+                                        <span class="d-block text-muted small">Hello,</span>
+                                        <span class="fw-bold small">{{ request.user.username }}</span>
+                                    </li>
+                                {% else %}
+                                    <li class="px-3 py-1 mb-2">
+                                        <span class="d-block text-muted small">Hello,</span>
+                                        <span class="fw-bold small">User</span>
+                                    </li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{% url 'shop:profile' %}">

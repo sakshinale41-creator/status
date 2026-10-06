@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Status Men's Wear</title>
+    <title>Register | Status Men's Wear</title>
     <style>
         body {
             background: linear-gradient(135deg, #dbeafe, #ede9fe);
@@ -15,11 +15,11 @@
             margin: 0;
             padding: 20px;
         }
-        .login-container {
+        .register-container {
             background: white;
             width: 100%;
             max-width: 420px;
-            padding: 35px;
+            padding: 30px;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
@@ -37,18 +37,18 @@
             margin-bottom: 25px;
         }
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
         .form-group label {
             display: block;
             font-size: 14px;
             font-weight: bold;
-            margin-bottom: 7px;
+            margin-bottom: 6px;
             color: #333;
         }
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 11px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 8px;
@@ -69,48 +69,53 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 5px;
+            margin-top: 10px;
         }
         button:hover {
             background: #4338ca;
         }
-        .register-text {
+        .login-text {
             text-align: center;
             margin-top: 18px;
             font-size: 14px;
             color: #666;
         }
-        .register-text a {
+        .login-text a {
             color: #4f46e5;
             font-weight: bold;
             text-decoration: none;
         }
-        .register-text a:hover {
+        .login-text a:hover {
             text-decoration: underline;
         }
         .error-message {
             color: red;
             font-size: 14px;
-            text-align: center;
             margin-bottom: 15px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="register-container">
         <h1 class="title">Status Men's Wear</h1>
-        <p class="subtitle">Welcome Back!</p>
+        <p class="subtitle">Create your account</p>
 
-        {% if form.errors or error %}
-            <p class="error-message">Invalid username/email or password.</p>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
         {% endif %}
 
-        <form class="login-form" method="post">
+        <form class="register-form" method="POST">
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="username">Username or Email</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
             </div>
 
             <div class="form-group">
@@ -118,10 +123,15 @@
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
             </div>
 
-            <button type="submit">Login</button>
-        </form>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
 
-       <p class="register-text">Don't have an account? <a href="{% url 'shop:register' %}">Register</a></p>
+            <button type="submit">Register</button>
+
+            <p class="login-text">Already have an account? <a href="{% url 'shop:customer_login' %}">Login</a></p>
+        </form>
     </div>
 </body>
 </html>

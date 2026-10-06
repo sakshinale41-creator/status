@@ -19,6 +19,7 @@ urlpatterns = [
     # Customer Authentication (Standard Signup & Login)
     path('login/', views.customer_login, name='customer_login'),
     path('logout/', views.customer_logout, name='logout'),
+    path('register/', views.register, name='register'),
 
     # User Profile, Orders & Payment
     path('profile/', views.profile, name='profile'),
