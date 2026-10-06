@@ -52,15 +52,14 @@ class ProductAdminForm(forms.ModelForm):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    form = ProductAdminForm  # He custom form aapan product admin la dila
-    list_display = ['name', 'category', 'price', 'available', 'created']  # <-- Ithe 'stock' kadhun takla
+    form = ProductAdminForm
+    # 'stock' field list_display madhe add keli ahe, mhanje admin madhe stock disel
+    list_display = ['name', 'category', 'price', 'stock', 'available', 'created']
+    search_fields = ('name',)
     list_filter = ['available', 'created', 'category']
-    list_editable = ['price', 'available']  # <-- Ithe 'stock' kadhun takla
+    # list_editable madhe stock pan taku shaktees jyamule direct admin list madhun pan stock badalata yeil
+    list_editable = ['price', 'stock', 'available']
     inlines = [ProductImageInline]
-
-
-from django.contrib import admin
-from .models import Order, OrderItem
 
 
 class OrderItemInline(admin.TabularInline):

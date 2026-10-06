@@ -34,9 +34,10 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Selling Price")
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True,verbose_name="MRP / Original Price")
     available = models.BooleanField(default=True)
-    stock = models.PositiveIntegerField(default=10)
+    stock = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
     # Hya field madhe multiple sizes save hotil (e.g. "S, M, L")
