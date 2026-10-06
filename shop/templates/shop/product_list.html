@@ -267,6 +267,9 @@
                         {% if product.image %}
                             <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                         {% else %}
+                            <!-- Jar image nasel tar default placeholder dakhvnyasathi -->
+                            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="No Image">
+                        {% endif %}
                             <div class="bg-secondary text-white d-flex align-items-center justify-content-center card-img-top">
                                 No Image
                             </div>

@@ -40,7 +40,6 @@ class Product(models.Model):
     stock = models.IntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
 
-    # Hya field madhe multiple sizes save hotil (e.g. "S, M, L")
     size = models.CharField(max_length=50, blank=True, null=True, help_text="Select available sizes")
 
     def __str__(self):
