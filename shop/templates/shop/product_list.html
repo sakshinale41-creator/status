@@ -267,9 +267,6 @@
                         {% if product.image %}
                             <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                         {% else %}
-                            <!-- Jar image nasel tar default placeholder dakhvnyasathi -->
-                            <img src="{% static 'images/default.jpg' %}" class="card-img-top" alt="No Image">
-                        {% endif %}
                             <div class="bg-secondary text-white d-flex align-items-center justify-content-center card-img-top">
                                 No Image
                             </div>
@@ -289,13 +286,7 @@
 
                             <!-- Bottom Row: View Button + Heart Favorite Button -->
                             <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
-                                <!-- Price with Original Price Strike-through Added -->
-                                <div class="d-flex align-items-baseline gap-1">
-                                    <span class="fs-6 fs-md-5 fw-bold text-primary">₹{{ product.price }}</span>
-                                    {% if product.original_price %}
-                                        <span class="text-decoration-line-through text-muted" style="font-size: 0.75rem;">₹{{ product.original_price }}</span>
-                                    {% endif %}
-                                </div>
+                                <span class="fs-6 fs-md-5 fw-bold text-primary">₹{{ product.price }}</span>
                                 <div class="d-flex gap-1 align-items-center">
                                     <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-2 px-md-3">
                                         View
@@ -438,7 +429,7 @@
             loadWishlistModal();
 
             document.querySelectorAll('.wishlist-btn').forEach(btn => {
-                if (btn.getAttribute('data-id') === item.id) {
+                if (btn.getAttribute('data-id') === id) {
                     let icon = btn.querySelector('i');
                     icon.classList.remove('bi-heart-fill');
                     icon.classList.add('bi-heart');
