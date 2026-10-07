@@ -30,7 +30,8 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     'status-ez00.onrender.com',
-    '.onrender.com'
+    '.onrender.com',
+    '.railway.app',
 ]
 
 # Application definition
@@ -95,7 +96,7 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.environ.get('MYSQL_DATABASE'),
             'USER': os.environ.get('MYSQLUSER'),
-            'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
+            'PASSWORD': os.environ.get('MYSQL_ROOT_PASSWORD'),  # <-- Ithe MYSQLPASSWORD kar (ROOT_PASSWORD kadun tak)
             'HOST': os.environ.get('MYSQLHOST'),
             'PORT': os.environ.get('MYSQLPORT'),
         }
