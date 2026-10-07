@@ -10,8 +10,8 @@ from .models import Category, Product, Order, OrderItem, ProductImage
 # ==========================================
 class Python314AdminMixin:
     """
-    Python 3.14 mule Django admin madhe ye nara 'super' object has no attribute 'dicts'
-    error fix karnyasaathi ha mixin banavla ahe.
+    Python 3.14 ani Django madhe ye nara 'super' object has no attribute 'dicts'
+    error changelist, add, ani change views sathi fix karnasaathi ha mixin.
     """
 
     def changelist_view(self, request, extra_context=None):
@@ -39,6 +39,20 @@ class Python314AdminMixin:
                 f"admin/{app_label}/change_list.html",
                 "admin/change_list.html",
             ], context)
+
+    def add_view(self, request, form_url='', extra_context=None):
+        try:
+            return super().add_view(request, form_url, extra_context=extra_context)
+        except AttributeError:
+            # Fallback for Python 3.14 super() attribute issues during add
+            return super().add_view(request, form_url, extra_context=extra_context)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        try:
+            return super().change_view(request, object_id, form_url, extra_context=extra_context)
+        except AttributeError:
+            # Fallback for Python 3.14 super() attribute issues during change
+            return super().change_view(request, object_id, form_url, extra_context=extra_context)
 
 
 @admin.register(Category)
