@@ -1,62 +1,13 @@
+import csv
 from django.contrib import admin
 from django.db.models import Sum
 from django import forms
-from django.template.response import TemplateResponse
+from django.http import HttpResponse
 from .models import Category, Product, Order, OrderItem, ProductImage
 
 
-# ==========================================
-# PYTHON 3.14 COMPATIBILITY BASE ADMIN CLASS
-# ==========================================
-class Python314AdminMixin:
-    """
-    Python 3.14 ani Django madhe ye nara 'super' object has no attribute 'dicts'
-    error changelist, add, ani change views sathi fix karnasaathi ha mixin.
-    """
-
-    def changelist_view(self, request, extra_context=None):
-        try:
-            return super().changelist_view(request, extra_context=extra_context)
-        except AttributeError:
-            Model = self.model
-            opts = Model._meta
-            app_label = opts.app_label
-
-            changelist = self.get_changelist_instance(request)
-            media = self.media
-            extra_context = extra_context or {}
-
-            context = {
-                **self.admin_site.each_context(request),
-                'title': f'Select {opts.verbose_name} to change',
-                'cl': changelist,
-                'media': media,
-                **extra_context,
-            }
-            request.current_app = self.admin_site.name
-            return TemplateResponse(request, self.change_list_template or [
-                f"admin/{app_label}/{Model._meta.model_name}/change_list.html",
-                f"admin/{app_label}/change_list.html",
-                "admin/change_list.html",
-            ], context)
-
-    def add_view(self, request, form_url='', extra_context=None):
-        try:
-            return super().add_view(request, form_url, extra_context=extra_context)
-        except AttributeError:
-            # Fallback for Python 3.14 super() attribute issues during add
-            return super().add_view(request, form_url, extra_context=extra_context)
-
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        try:
-            return super().change_view(request, object_id, form_url, extra_context=extra_context)
-        except AttributeError:
-            # Fallback for Python 3.14 super() attribute issues during change
-            return super().change_view(request, object_id, form_url, extra_context=extra_context)
-
-
 @admin.register(Category)
-class CategoryAdmin(Python314AdminMixin, admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
 
@@ -66,7 +17,6 @@ class ProductImageInline(admin.TabularInline):
     extra = 3
 
 
-# Product admin sathi custom form (checkboxes sathi)
 class ProductAdminForm(forms.ModelForm):
     SIZE_CHOICES = [
         ('S', 'S'),
@@ -99,7 +49,7 @@ class ProductAdminForm(forms.ModelForm):
 
 
 @admin.register(Product)
-class ProductAdmin(Python314AdminMixin, admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
     list_display = ['name', 'category', 'price', 'original_price', 'stock', 'available', 'created']
     search_fields = ('name',)
@@ -114,10 +64,44 @@ class OrderItemInline(admin.TabularInline):
     extra = 0
 
 
+# ==========================================
+# EXPORT TO CSV FUNCTION FOR OWNER
+# ==========================================
+def export_to_csv(modeladmin, request, queryset):
+    opts = modeladmin.model._meta
+    content_type = 'text/csv'
+    response = HttpResponse(content_type=content_type)
+    response['Content-Disposition'] = f'attachment; filename={opts.verbose_name_plural}-export.csv'
+
+    writer = csv.writer(response)
+    fields = ['id', 'full_name', 'phone_number', 'address', 'pincode', 'total_amount', 'status', 'is_paid',
+              'created_at']
+
+    writer.writerow([field.replace('_', ' ').capitalize() for field in fields])
+
+    for obj in queryset:
+        row = []
+        for field in fields:
+            value = getattr(obj, field)
+            row.append(str(value))
+        writer.writerow(row)
+
+    return response
+
+
+export_to_csv.short_description = "Download Selected Orders (CSV)"
+
+
 @admin.register(Order)
-class OrderAdmin(Python314AdminMixin, admin.ModelAdmin):
-    list_display = ['id', 'full_name', 'phone_number', 'get_sizes', 'total_amount', 'status', 'created_at']
+class OrderAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'full_name', 'phone_number', 'address', 'pincode',
+        'get_sizes', 'total_amount', 'status', 'is_paid', 'created_at'
+    ]
+    list_filter = ['status', 'is_paid', 'created_at']
+    search_fields = ['full_name', 'phone_number', 'address', 'pincode']
     inlines = [OrderItemInline]
+    actions = [export_to_csv]
 
     def get_sizes(self, obj):
         sizes = [item.size for item in obj.items.all() if item.size]

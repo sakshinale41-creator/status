@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,8 @@
     <title>Status | Online Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- FontAwesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Google Fonts: Libre Baskerville -->
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -127,9 +130,10 @@
         <div class="container d-flex flex-column align-items-stretch gap-2">
 
             <!-- Top Row: Brand on Left, Profile, Wishlist & Cart on Right -->
-            <div class="d-flex justify-content-between align-items-center w-100 flex-nowrap">
-                <a class="navbar-brand m-0" href="{% url 'shop:product_list' %}">
-                    Status
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <a class="navbar-brand m-0 d-flex align-items-center gap-2 text-decoration-none" href="{% url 'shop:product_list' %}">
+                    <img src="{% static 'images/shop_logo.jpeg' %}" alt="Logo" style="height: 38px; width: 38px; border-radius: 50%; object-fit: cover;">
+                    <span style="font-weight: 700; color: #174A8B;">Status</span>
                 </a>
 
                 <div class="d-flex align-items-center gap-3 gap-md-4 flex-nowrap">
@@ -275,7 +279,7 @@
                             <span class="badge bg-light text-secondary border mb-2 w-auto align-self-start" style="font-size: 0.75rem;">{{ product.category.name }}</span>
                             <h5 class="card-title fs-6 fw-bold text-dark text-truncate">{{ product.name }}</h5>
 
-                            <!-- Stock Status Indicator (Stock count lapvlela ahe) -->
+                            <!-- Stock Status Indicator -->
                             <div class="mb-2">
                                 {% if product.stock > 0 %}
                                     <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold" style="font-size: 0.7rem;">In Stock</span>
@@ -340,13 +344,47 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-auto">
-        <div class="container text-center">
-            <p class="mb-0">&copy; 2026 Status. All Rights Reserved.</p>
-            <small class="text-muted">Automated Order Management System</small>
+    <!-- Custom Footer (Fixed Text Visibility) -->
+<footer class="py-5 mt-5" style="background-color: #111111; border-top: 1px solid #333; color: #ffffff;">
+    <div class="container">
+        <div class="row gy-4 justify-content-between">
+
+           <!-- Column 1: Logo & Short Info -->
+            <div class="col-lg-5 col-md-6">
+                <div class="mb-3 d-flex align-items-center gap-3">
+                    <!-- Fresh Clean Logo Without Border & Perfect Size -->
+                    <img src="{% static 'images/shop_logo.jpeg' %}" alt="Status Men's Wear Logo" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
+                    <h4 class="text-white mb-0" style="font-weight: 700; letter-spacing: 1px;">Status Men's Wear</h4>
+                </div>
+                <p class="small mb-3" style="color: #cccccc; line-height: 1.6;">
+                    Your premium destination for exclusive men's fashion. Quality clothing and best styling at Kale Bazar Peth.
+                </p>
+                <div class="d-flex gap-2 mt-3">
+                    <a href="https://www.instagram.com/status_nx.09?stkn=MTZycnQ0cDVzNDQ5aQ%3D%3D" target="_blank" class="text-white border border-secondary rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 35px; height: 35px;"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/" target="_blank" class="text-white border border-secondary rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 35px; height: 35px;"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- Column 2: Contact Us (Owner Details) -->
+            <div class="col-lg-5 col-md-6">
+                <h6 class="text-white fw-bold mb-3 pb-1" style="border-bottom: 2px solid #d4af37; display: inline-block;">Contact Us</h6>
+                <ul class="list-unstyled small" style="color: #cccccc;">
+                    <li class="mb-2"><i class="fas fa-phone me-2 text-warning"></i> +91 73854 92339 </li>
+                    <li class="mb-2"><i class="fab fa-instagram me-2 text-warning"></i> @status_nx.09 </li>
+                    <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-warning"></i> Kale Bazar Peth Road Kale, Taluka: Panhala, Dist: Kolhapur</li>
+                </ul>
+            </div>
+
         </div>
-    </footer>
+
+        <!-- Bottom Copyright Row -->
+        <div class="row mt-4 pt-3 border-top border-secondary text-center small" style="color: #aaaaaa;">
+            <div class="col">
+                &copy; 2026 Status Men's Wear. All Rights Reserved.
+            </div>
+        </div>
+    </div>
+</footer>
 
     <!-- Wishlist JavaScript Logic -->
     <script>
