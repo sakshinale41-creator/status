@@ -13,11 +13,11 @@
             background-color: #ffffff;
         }
         .navbar {
-            background-color: #c4a47c !important; /* Dashboard sarakha brown shade */
-            border-bottom: 1px solid #b39268;
+            background-color: #faf8f2 !important; /* Dashboard sarakha brown shade */
+            border-bottom: 1px solid #e6dfd3;
         }
         .navbar-brand {
-            color: #1e3a8a !important; /* Deep blue font */
+            color: #6d4c41 !important; /* Deep blue font */
             font-weight: 700;
         }
         .card {
@@ -27,16 +27,17 @@
             background-color: #ffffff;
         }
         .btn-primary-custom {
-            background-color: #1e3a8a;
-            border-color: #1e3a8a;
+            background-color: #6d4c41;
+            border-color: #6d4c41;
             color: white;
         }
         .btn-primary-custom:hover {
-            background-color: #172554;
-            border-color: #172554;
+            background-color: #55382f;
+            border-color: #55382f;
             color: white;
         }
     </style>
+    {% include 'shop/_theme.html' %}
 </head>
 <body>
 
@@ -70,7 +71,11 @@
                         <span class="fw-bold fs-4 text-primary">#{{ order.id }}</span>
                     </div>
 
+                    <p class="small text-muted mb-3">Payment is verified by our team. For faster confirmation, send your order details to us on WhatsApp.</p>
                     <div class="d-grid gap-2">
+                        <a href="https://wa.me/917385492339?text={{ wa_text|urlencode }}" target="_blank" rel="noopener" class="btn btn-wa btn-lg fw-bold rounded-3 py-3">
+                            <i class="bi bi-whatsapp me-2"></i> Send Order on WhatsApp
+                        </a>
                         <!-- Track Your Order Button -->
                         <a href="{% url 'shop:track_order' %}" class="btn btn-outline-primary btn-lg fw-bold rounded-3 py-3">
                             <i class="bi bi-truck me-2"></i> Track Your Order

@@ -101,7 +101,20 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['status', 'is_paid', 'created_at']
     search_fields = ['full_name', 'phone_number', 'address', 'pincode']
     inlines = [OrderItemInline]
-    actions = [export_to_csv]
+    actions = [export_to_csv, 'mark_paid', 'mark_shipped', 'mark_delivered']
+    ordering = ['-created_at']
+
+    def mark_paid(self, request, queryset):
+        queryset.update(is_paid=True, status='Paid')
+    mark_paid.short_description = 'Mark selected as PAID (payment received)'
+
+    def mark_shipped(self, request, queryset):
+        queryset.update(status='Shipped')
+    mark_shipped.short_description = 'Mark selected as SHIPPED'
+
+    def mark_delivered(self, request, queryset):
+        queryset.update(status='Delivered')
+    mark_delivered.short_description = 'Mark selected as DELIVERED'
 
     def get_sizes(self, obj):
         sizes = [item.size for item in obj.items.all() if item.size]

@@ -168,3 +168,21 @@ MAILERS = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ---------- Order notifications for the shop owner (all optional, set as environment variables) ----------
+# Telegram (recommended, free, works on Render):  TELEGRAM_BOT_TOKEN  and  TELEGRAM_CHAT_ID
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
+# Email (optional):  ORDER_NOTIFY_EMAIL, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD (Gmail app password)
+ORDER_NOTIFY_EMAIL = os.environ.get('ORDER_NOTIFY_EMAIL', '')
+if os.environ.get('EMAIL_HOST_USER'):
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+    EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '587'))
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    DEFAULT_FROM_EMAIL = 'orders@status.local'

@@ -13,11 +13,11 @@
             background-color: #ffffff;
         }
         .navbar {
-            background-color: #c4a47c !important;
-            border-bottom: 1px solid #b39268;
+            background-color: #faf8f2 !important;
+            border-bottom: 1px solid #e6dfd3;
         }
         .navbar-brand {
-            color: #1e3a8a !important;
+            color: #6d4c41 !important;
             font-weight: 700;
         }
         .card {
@@ -28,16 +28,17 @@
         }
         /* 'Buy Now' button sarkha exact dark blue color */
         .btn-primary-custom {
-            background-color: #1e3a8a;
-            border-color: #1e3a8a;
+            background-color: #6d4c41;
+            border-color: #6d4c41;
             color: white;
         }
         .btn-primary-custom:hover {
-            background-color: #172554;
-            border-color: #172554;
+            background-color: #55382f;
+            border-color: #55382f;
             color: white;
         }
     </style>
+    {% include 'shop/_theme.html' %}
 </head>
 <body>
 
@@ -46,7 +47,7 @@
         <div class="container position-relative">
             <!-- Back to Shop / Dashboard Button -->
             <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
-                <i class="bi bi-arrow-left me-1"></i> Back to Shop
+                <i class="bi bi-arrow-left me-1"></i> Back<span class="d-none d-sm-inline">&nbsp;to Shop</span>
             </a>
             <!-- Centered Brand Name -->
             <a class="navbar-brand fs-3 position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}">
@@ -56,11 +57,16 @@
     </nav>
 
     <!-- Checkout Form Section -->
-    <div class="container py-5">
+    <div class="container py-4 py-md-5">
+        <div class="st-steps">
+            <div class="st-step done"><span class="st-dot">&#10003;</span><span class="st-label">Cart</span></div><span class="st-line"></span>
+            <div class="st-step now"><span class="st-dot">2</span><span class="st-label">Details</span></div><span class="st-line"></span>
+            <div class="st-step "><span class="st-dot">3</span><span class="st-label">Payment</span></div>
+        </div>
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card p-4 p-md-5">
-                    <h3 class="fw-bold mb-4 text-dark"><i class="bi bi-receipt me-2 text-primary"></i>Checkout Details</h3>
+                    <h3 class="fw-bold mb-4 text-dark">Delivery Details</h3>
 
                     <form method="POST">
                         {% csrf_token %}

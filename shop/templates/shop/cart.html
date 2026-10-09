@@ -9,41 +9,47 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
             background-color: #f8f9fa;
         }
         .btn-theme-primary {
-            background-color: #1e3a8a !important;
-            border-color: #1e3a8a !important;
+            background-color: #6d4c41 !important;
+            border-color: #6d4c41 !important;
             color: white !important;
         }
         .btn-theme-primary:hover {
-            background-color: #172554 !important;
-            border-color: #172554 !important;
+            background-color: #55382f !important;
+            border-color: #55382f !important;
             color: white !important;
         }
     </style>
+    {% include 'shop/_theme.html' %}
 </head>
-<body class="bg-light">
+<body class="bg-light has-bottomnav">
 
     <!-- Navbar with Brown Background -->
-    <nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3 border-bottom" style="background-color: #c4a47c !important;">
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3 border-bottom">
         <div class="container position-relative">
             <!-- Store Button -->
             <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
                 <i class="bi bi-shop me-1"></i> Store
             </a>
             <!-- Centered Brand Name -->
-            <a class="navbar-brand fs-3 fw-bold position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}" style="color: #1e3a8a !important;">
+            <a class="navbar-brand fs-3 fw-bold position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}" style="color: #6d4c41 !important;">
                 Status
             </a>
         </div>
     </nav>
 
     <!-- Cart Content -->
-    <div class="container py-5">
+    <div class="container py-4 py-md-5">
+        <div class="st-steps">
+            <div class="st-step now"><span class="st-dot">1</span><span class="st-label">Cart</span></div><span class="st-line"></span>
+            <div class="st-step "><span class="st-dot">2</span><span class="st-label">Details</span></div><span class="st-line"></span>
+            <div class="st-step "><span class="st-dot">3</span><span class="st-label">Payment</span></div>
+        </div>
         <div class="mb-4">
-            <h2 class="fw-bold mb-0 text-dark"><i class="bi bi-cart3 me-2 text-primary"></i>Your Shopping Cart</h2>
+            <h2 class="fw-bold mb-0 text-dark">Your Cart</h2>
         </div>
 
         {% if cart %}
@@ -56,10 +62,10 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Product</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
+                                        <th class="d-none d-sm-table-cell">Price</th>
+                                        <th>Qty</th>
                                         <th>Total</th>
-                                        <th>Action</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,20 +74,20 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     {% if item.product.image %}
-                                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="rounded me-3" style="width: 56px; height: 72px; object-fit: cover; flex-shrink:0;">
                                                     {% else %}
                                                         <div class="bg-secondary text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                                                             <i class="bi bi-image"></i>
                                                         </div>
                                                     {% endif %}
-                                                    <span class="fw-semibold text-dark">{{ item.product.name }}</span>
+                                                    <div><span class="fw-semibold text-dark d-block" style="font-size:.9rem;">{{ item.product.name }}</span>{% if item.size %}<span class="small text-muted">Size: {{ item.size }}</span>{% endif %}</div>
                                                 </div>
                                             </td>
-                                            <td>₹{{ item.price }}</td>
+                                            <td class="d-none d-sm-table-cell">₹{{ item.price|floatformat:2 }}</td>
                                             <td>{{ item.quantity }}</td>
-                                            <td class="fw-bold">₹{{ item.total_price }}</td>
+                                            <td class="fw-bold">₹{{ item.total_price|floatformat:2 }}</td>
                                             <td>
-                                                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm">Remove</a>
+                                                <a href="{% url 'shop:remove_from_cart' item.product.id %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3"><i class="bi bi-trash"></i> <span class="d-none d-sm-inline">Remove</span></a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -97,18 +103,26 @@
                         <h4 class="fw-bold mb-3 text-dark">Order Summary</h4>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Total Amount</span>
-                            <span class="fw-bold text-success fs-5">
+                            <span class="fw-bold fs-4" style="color:#55382f;">
                                 {% if total_price %}
-                                    ₹{{ total_price }}
+                                    ₹{{ total_price|floatformat:2 }}
                                 {% else %}
                                     ₹{{ cart.get_total_price }}
                                 {% endif %}
                             </span>
                         </div>
+                        <div class="d-flex justify-content-between mb-2 small">
+                            <span class="text-muted">Delivery</span><span class="text-muted">Confirmed on WhatsApp</span>
+                        </div>
                         <hr>
                         <a href="{% url 'shop:checkout' %}" class="btn btn-theme-primary btn-lg w-100 fw-bold rounded-3 shadow-sm">
                             <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
                         </a>
+                        <div class="st-trust mt-3">
+                            <div><i class="bi bi-patch-check"></i>Quality checked</div>
+                            <div><i class="bi bi-qr-code-scan"></i>Pay by UPI</div>
+                            <div><i class="bi bi-headset"></i>WhatsApp support</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -134,5 +148,6 @@
         </div>
     </footer>
 
+    {% include 'shop/_bottom_nav.html' with active='cart' %}
 </body>
 </html>

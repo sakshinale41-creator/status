@@ -19,28 +19,29 @@
             background-color: #ffffff;
         }
         .btn-primary-custom {
-            background-color: #1e3a8a;
-            border-color: #1e3a8a;
+            background-color: #6d4c41;
+            border-color: #6d4c41;
             color: white;
         }
         .btn-primary-custom:hover {
-            background-color: #172554;
-            border-color: #172554;
+            background-color: #55382f;
+            border-color: #55382f;
             color: white;
         }
     </style>
+    {% include 'shop/_theme.html' %}
 </head>
 <body>
 
     <!-- Navbar with Brown Background -->
-    <nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3 border-bottom" style="background-color: #c4a47c !important;">
+    <nav class="navbar navbar-expand-lg sticky-top shadow-sm py-3 border-bottom">
         <div class="container position-relative">
             <!-- Store Button -->
             <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">
                 <i class="bi bi-shop me-1"></i> Store
             </a>
             <!-- Centered Brand Name -->
-            <a class="navbar-brand fs-3 fw-bold position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}" style="color: #1e3a8a !important;">
+            <a class="navbar-brand fs-3 fw-bold position-absolute start-50 translate-middle-x m-0" href="{% url 'shop:product_list' %}" style="color: #6d4c41 !important;">
                 Status
             </a>
             <!-- Cart Button -->

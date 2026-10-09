@@ -1,0 +1,7 @@
+<a href="https://wa.me/917385492339?text=Hello%20Status%20Clothing%20Line" target="_blank" rel="noopener" class="st-wa-float" aria-label="Chat on WhatsApp"><i class="bi bi-whatsapp"></i></a>
+<nav class="st-bottomnav" aria-label="Main">
+    <a href="{% url 'shop:product_list' %}" class="{% if active == 'home' %}active{% endif %}"><i class="bi bi-house-door"></i>Home</a>
+    <a href="{% url 'shop:cart_detail' %}" class="{% if active == 'cart' %}active{% endif %}"><i class="bi bi-bag"></i>Cart</a>
+    <a href="{% url 'shop:profile' %}" class="{% if active == 'profile' %}active{% endif %}"><i class="bi bi-person"></i>Profile</a>
+    <a href="https://wa.me/917385492339?text=Hello%20Status%20Clothing%20Line" target="_blank" rel="noopener" class="wa"><i class="bi bi-whatsapp"></i>WhatsApp</a>
+</nav>

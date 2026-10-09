@@ -5,6 +5,7 @@ app_name = 'shop'
 
 urlpatterns = [
     path('', views.product_list, name='product_list'),
+    path('welcome/', views.landing_page, name='landing'),
 
     # Category & Products
     path('category/<slug:category_slug>/', views.product_list, name='product_list_by_category'),
@@ -13,7 +14,7 @@ urlpatterns = [
     # Cart & Checkout
     path('cart/', views.cart_detail, name='cart_detail'),
     path('add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
-    path('remove-from-cart/<str:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('remove-from-cart/<str:product_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('checkout/', views.checkout, name='checkout'),
 
     # Customer Authentication (Standard Signup & Login)

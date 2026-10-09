@@ -23,14 +23,14 @@
         .navbar-brand {
             font-size: 2.2rem !important;
             font-weight: 700;
-            color: #174A8B;
+            color: #6d4c41;
             font-family: "Poppins", sans-serif;
             padding: 0;
         }
 
         /* Hero Banner Styling */
         .hero-banner {
-            color: #174A8B;
+            color: #6d4c41;
             background-color: #C2A878;
             border-radius: 15px;
         }
@@ -120,10 +120,72 @@
                 margin-top: 8px !important;
             }
         }
+
+        /* ---------- Redesign ---------- */
+        .st-hero {
+            display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+            background: linear-gradient(120deg, #eceBd5 0%, #e3d8bd 100%);
+            border: 1px solid #e6dfd3; border-radius: 22px;
+            padding: 2.5rem 2.5rem;
+            overflow: hidden;
+        }
+        .st-hero h1 { font-size: clamp(2.1rem, 5vw, 3.6rem); line-height: 1.05; font-weight: 600; color: #55382f; margin: .6rem 0 .8rem; }
+        .st-hero p { color: #6d5a50; font-size: 1.05rem; max-width: 30rem; margin-bottom: 1.4rem; }
+        .st-hero-logo { height: 190px; width: 190px; border-radius: 50%; object-fit: cover; box-shadow: 0 10px 30px rgba(85,56,47,.18); flex-shrink: 0; }
+        @media (max-width: 768px) { .st-hero { padding: 1.7rem 1.4rem; border-radius: 18px; } }
+
+        .product-card { position: relative; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(85,56,47,.14) !important; }
+        .st-img-wrap { display: block; position: relative; background: #f1ece0; }
+        .product-card .card-img-top { height: auto !important; aspect-ratio: 3 / 4; object-fit: cover; width: 100%; border-radius: 0; }
+        .st-noimg { display:flex; align-items:center; justify-content:center; color:#a89c93; background:#f1ece0; }
+        .st-tag { position:absolute; top:10px; left:10px; font-size:.68rem; letter-spacing:1px; text-transform:uppercase; padding:4px 9px; border-radius:20px; background:#fff; color:#55382f; font-weight:500; }
+        .st-tag-out { background:#2b211d; color:#fff; }
+        .st-heart { position:absolute; top:8px; right:8px; width:34px; height:34px; border-radius:50%; border:0; background:rgba(255,255,255,.92); color:#6d4c41; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.12); z-index:2; }
+        .st-heart:hover { transform: scale(1.08); }
+        .st-heart .bi-heart-fill { color:#c0392b; }
+        .st-cat { text-transform:uppercase; letter-spacing:1.5px; font-size:.65rem; color:#a98467; margin-bottom:2px; }
+        .st-price { font-weight:600; font-size:1.05rem; color:#2b211d; }
+        .st-mrp { font-size:.85rem; color:#a09289; text-decoration: line-through; }
+
+        .btn-category { border-radius: 30px !important; border: 1px solid #e6dfd3 !important; font-weight: 400 !important; background:#fff; color:#2b211d; box-shadow:none !important; }
+        .btn-category:hover { border-color:#a98467 !important; }
+        .btn-category.btn-primary { background:#6d4c41 !important; border-color:#6d4c41 !important; color:#fff !important; }
+
+        .navbar .form-control, .navbar .input-group-text { background:#fff !important; border-color:#e6dfd3 !important; border-radius: 30px; }
+        .navbar .input-group-text { border-radius: 30px 0 0 30px; }
+        .navbar .form-control { border-radius: 0 30px 30px 0; }
+
+        .st-footer { background:#3b2a24; color:#e9dfd0; }
+        .st-footer h6 { color:#fff; letter-spacing:2px; text-transform:uppercase; font-size:.8rem; }
+        .st-footer .text-warning { color:#c4a47c !important; }
+
+        .st-hero-photo { height: 250px; width: 250px; border-radius: 125px 125px 18px 18px; object-fit: cover; box-shadow: 0 10px 30px rgba(85,56,47,.2); flex-shrink: 0; }
+        @media (max-width: 768px) { .st-hero-photo { display:none; } }
+        .st-hero-2 { background: linear-gradient(120deg, #e8dfe0 0%, #d9c4b4 100%); }
+        .st-hero-3 { background: linear-gradient(120deg, #e3ead9 0%, #cfdcc1 100%); }
+        .st-ind { margin-bottom: .5rem; }
+        .st-ind button { width: 8px !important; height: 8px !important; border-radius: 50%; background-color: #6d4c41 !important; border: 0 !important; opacity: .35; }
+        .st-ind button.active { opacity: 1; }
+        .st-h2 { font-size: 1.7rem; font-weight: 600; color: #55382f; }
+        .st-tiles { display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+        .st-tile { position: relative; display:block; aspect-ratio: 4/5; border-radius: 16px; overflow:hidden; background:#e9e1cf; text-decoration:none; }
+        .st-tile img { width:100%; height:100%; object-fit:cover; transition: transform .35s ease; }
+        .st-tile:hover img { transform: scale(1.06); }
+        .st-tile::after { content:""; position:absolute; inset:0; background: linear-gradient(to top, rgba(43,33,29,.72) 0%, rgba(43,33,29,0) 55%); }
+        .st-tile-name { position:absolute; left:12px; right:12px; bottom:10px; z-index:2; color:#fff; font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; line-height:1.1; }
+        .st-tile-ph { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:2rem; color:#a98467; }
+        @media (max-width: 576px) {
+            .st-tiles { display:flex; overflow-x:auto; gap:10px; scroll-snap-type:x mandatory; scroll-padding-left:12px; margin-left:-12px; margin-right:-12px; padding:0 12px 6px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+            .st-tiles::-webkit-scrollbar { display:none; }
+            .st-tile { flex:0 0 118px; aspect-ratio: 3/4; scroll-snap-align:start; border-radius:14px; }
+            .st-tile-name { font-size:1.05rem; left:9px; bottom:8px; }
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% include 'shop/_theme.html' %}
 </head>
-<body class="bg-light">
+<body class="bg-light has-bottomnav">
 
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-white sticky-top shadow-sm py-2 py-lg-3">
@@ -133,7 +195,7 @@
             <div class="d-flex justify-content-between align-items-center w-100">
                 <a class="navbar-brand m-0 d-flex align-items-center gap-2 text-decoration-none" href="{% url 'shop:product_list' %}">
                     <img src="{% static 'images/shop_logo.jpeg' %}" alt="Logo" style="height: 38px; width: 38px; border-radius: 50%; object-fit: cover;">
-                    <span style="font-weight: 700; color: #174A8B;">Status</span>
+                    <span style="font-weight: 700; color: #6d4c41;">Status</span>
                 </a>
 
                 <div class="d-flex align-items-center gap-3 gap-md-4 flex-nowrap">
@@ -168,7 +230,7 @@
                                     <span class="fw-bold small">To access your account</span>
                                 </li>
                                 <li class="px-3 mb-2">
-                                    <a class="btn btn-primary w-100 fw-bold py-2 rounded shadow-sm text-center" href="{% url 'shop:customer_login' %}" style="background-color: #174A8B; border: none;">
+                                    <a class="btn btn-primary w-100 fw-bold py-2 rounded shadow-sm text-center" href="{% url 'shop:customer_login' %}" style="background-color: #6d4c41; border: none;">
                                         Login
                                     </a>
                                 </li>
@@ -216,21 +278,81 @@
         </div>
     </nav>
 
-    <!-- Hero Banner -->
-    <div class="container my-4">
-        <div class="p-4 p-md-5 hero-banner shadow text-center text-md-start">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-5 fw-bold mb-2">Exclusive Mens Collection</h1>
-                    <p class="fs-5 opacity-75 mb-3">Best Quality & Automated Online Ordering!</p>
+    {% if not category and not request.GET.q %}
+    <!-- Hero Banner (rotating) -->
+    <div class="container mt-3 mt-md-4">
+        <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators st-ind">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <section class="st-hero">
+                        <div class="st-hero-text">
+                            <span class="st-eyebrow">New Arrivals</span>
+                            <h1>Dress well.<br>Be remembered.</h1>
+                            <p>Quality men's clothing, from Kale Bazar Peth &mdash; order online, pay by UPI.</p>
+                            <a href="#products" class="btn btn-primary px-4 py-2">Shop Collection</a>
+                        </div>
+                        {% with hp=products.0 %}
+                            {% if hp and hp.image %}
+                                <img class="st-hero-photo" src="{{ hp.image.url }}" alt="{{ hp.name }}">
+                            {% else %}
+                                <img class="st-hero-logo d-none d-md-block" src="{% static 'images/shop_logo.jpeg' %}" alt="Status Clothing Line">
+                            {% endif %}
+                        {% endwith %}
+                    </section>
+                </div>
+                <div class="carousel-item">
+                    <section class="st-hero st-hero-2">
+                        <div class="st-hero-text">
+                            <span class="st-eyebrow">Festive &amp; Everyday</span>
+                            <h1>Kurta &amp; shirts<br>for every occasion.</h1>
+                            <p>Pick your size, add to cart and checkout in a minute.</p>
+                            <a href="{% url 'shop:product_list' %}?q=Kurta" class="btn btn-primary px-4 py-2">Browse Kurta</a>
+                        </div>
+                        <img class="st-hero-logo d-none d-md-block" src="{% static 'images/shop_logo.jpeg' %}" alt="Status Clothing Line">
+                    </section>
+                </div>
+                <div class="carousel-item">
+                    <section class="st-hero st-hero-3">
+                        <div class="st-hero-text">
+                            <span class="st-eyebrow">Need help choosing?</span>
+                            <h1>Chat with us<br>on WhatsApp.</h1>
+                            <p>Ask about sizes, colours or stock &mdash; we reply personally.</p>
+                            <a href="https://wa.me/917385492339?text=Hello%20Status%20Clothing%20Line" target="_blank" rel="noopener" class="btn btn-wa px-4 py-2"><i class="bi bi-whatsapp me-1"></i> Message Us</a>
+                        </div>
+                        <img class="st-hero-logo d-none d-md-block" src="{% static 'images/shop_logo.jpeg' %}" alt="Status Clothing Line">
+                    </section>
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
 
     <!-- Main Content -->
     <div class="container py-2">
+        {% if not category and not request.GET.q %}
+        <div class="d-flex justify-content-between align-items-end mb-3 mt-2">
+            <div><span class="st-eyebrow">Browse</span><h2 class="st-h2 mb-0">Shop by Category</h2></div>
+        </div>
+        <div class="st-tiles mb-4">
+            {% for c in categories %}
+                <a href="{% url 'shop:product_list_by_category' c.slug %}" class="st-tile">
+                    {% if c.cover %}<img src="{{ c.cover }}" alt="{{ c.name }}" loading="lazy">
+                    {% else %}<span class="st-tile-ph"><i class="bi bi-bag"></i></span>{% endif %}
+                    <span class="st-tile-name">{{ c.name }}</span>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-between align-items-end mb-3">
+            <div><span class="st-eyebrow">Collection</span><h2 class="st-h2 mb-0">All Products</h2></div>
+        </div>
+        {% endif %}
         <!-- Horizontal Scrollable Categories -->
+        {% if category or request.GET.q %}
         <div class="category-scroll mb-4">
             {% for c in categories %}
                 <div class="dropdown">
@@ -262,48 +384,39 @@
                 </div>
             {% endfor %}
         </div>
+        {% endif %}
 
         <!-- Products Grid -->
-        <div class="row g-3 g-md-4 mb-5">
+        <div id="products" class="row g-3 g-md-4 mb-5">
             {% for product in products %}
                 <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card h-100 shadow-sm product-card">
-                        {% if product.image %}
-                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                        {% else %}
-                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center card-img-top">
-                                No Image
-                            </div>
-                        {% endif %}
+                    <div class="card h-100 product-card">
+                        <a href="{% url 'shop:product_detail' product.id %}" class="st-img-wrap">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" loading="lazy">
+                            {% else %}
+                                <div class="st-noimg card-img-top">No Image</div>
+                            {% endif %}
+                            {% if product.stock <= 0 %}<span class="st-tag st-tag-out">Sold out</span>{% endif %}
+                        </a>
+                        <button class="st-heart wishlist-btn"
+                                data-id="{{ product.id }}"
+                                data-name="{{ product.name }}"
+                                data-price="{{ product.price }}"
+                                data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
+                                title="Add to Wishlist" aria-label="Add to Wishlist" onclick="toggleWishlist(this)">
+                            <i class="bi bi-heart"></i>
+                        </button>
                         <div class="card-body d-flex flex-column p-2 p-md-3">
-                            <span class="badge bg-light text-secondary border mb-2 w-auto align-self-start" style="font-size: 0.75rem;">{{ product.category.name }}</span>
-                            <h5 class="card-title fs-6 fw-bold text-dark text-truncate">{{ product.name }}</h5>
-
-                            <!-- Stock Status Indicator -->
-                            <div class="mb-2">
-                                {% if product.stock > 0 %}
-                                    <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold" style="font-size: 0.7rem;">In Stock</span>
-                                {% else %}
-                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold" style="font-size: 0.7rem;">Out of Stock</span>
+                            <span class="st-cat">{{ product.category.name }}</span>
+                            <h5 class="card-title fs-6 mb-1 text-truncate">
+                                <a href="{% url 'shop:product_detail' product.id %}" class="text-decoration-none text-dark">{{ product.name }}</a>
+                            </h5>
+                            <div class="mt-auto pt-1 d-flex align-items-baseline gap-2 flex-wrap">
+                                <span class="st-price">&#8377;{{ product.price|floatformat:"-2" }}</span>
+                                {% if product.original_price and product.original_price > product.price %}
+                                    <span class="st-mrp">&#8377;{{ product.original_price|floatformat:"-2" }}</span>
                                 {% endif %}
-                            </div>
-
-                            <!-- Bottom Row: View Button + Heart Favorite Button -->
-                            <div class="mt-auto pt-2 d-flex justify-content-between align-items-center">
-                                <span class="fs-6 fs-md-5 fw-bold text-primary">₹{{ product.price }}</span>
-                                <div class="d-flex gap-1 align-items-center">
-                                    <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-2 px-md-3">
-                                        View
-                                    </a>
-                                    <button class="btn btn-sm btn-light text-danger border-0 rounded-circle p-1 wishlist-btn"
-                                            data-id="{{ product.id }}"
-                                            data-name="{{ product.name }}"
-                                            data-price="{{ product.price }}"
-                                            data-image="{% if product.image %}{{ product.image.url }}{% endif %}"
-                                            title="Add to Wishlist" onclick="toggleWishlist(this)">
-                                        <i class="bi bi-heart fs-6"></i>
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -345,7 +458,7 @@
     </div>
 
     <!-- Custom Footer (Fixed Text Visibility) -->
-<footer class="py-5 mt-5" style="background-color: #111111; border-top: 1px solid #333; color: #ffffff;">
+<footer class="py-5 mt-5 st-footer">
     <div class="container">
         <div class="row gy-4 justify-content-between">
 
@@ -354,21 +467,21 @@
                 <div class="mb-3 d-flex align-items-center gap-3">
                     <!-- Fresh Clean Logo Without Border & Perfect Size -->
                     <img src="{% static 'images/shop_logo.jpeg' %}" alt="Status Men's Wear Logo" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
-                    <h4 class="text-white mb-0" style="font-weight: 700; letter-spacing: 1px;">Status Men's Wear</h4>
+                    <h4 class="text-white mb-0" style="font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">Status Clothing Line</h4>
                 </div>
-                <p class="small mb-3" style="color: #cccccc; line-height: 1.6;">
+                <p class="small mb-3" style="color: #d8ccbb; line-height: 1.7;">
                     Your premium destination for exclusive men's fashion. Quality clothing and best styling at Kale Bazar Peth.
                 </p>
                 <div class="d-flex gap-2 mt-3">
                     <a href="https://www.instagram.com/status_nx.09?stkn=MTZycnQ0cDVzNDQ5aQ%3D%3D" target="_blank" class="text-white border border-secondary rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 35px; height: 35px;"><i class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/" target="_blank" class="text-white border border-secondary rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 35px; height: 35px;"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://wa.me/917385492339" target="_blank" class="text-white border border-secondary rounded-circle d-flex align-items-center justify-content-center text-decoration-none" style="width: 35px; height: 35px;"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
 
             <!-- Column 2: Contact Us (Owner Details) -->
             <div class="col-lg-5 col-md-6">
-                <h6 class="text-white fw-bold mb-3 pb-1" style="border-bottom: 2px solid #d4af37; display: inline-block;">Contact Us</h6>
-                <ul class="list-unstyled small" style="color: #cccccc;">
+                <h6 class="text-white fw-bold mb-3 pb-1" style="border-bottom: 1px solid #c4a47c; display: inline-block;">Contact Us</h6>
+                <ul class="list-unstyled small" style="color: #d8ccbb;">
                     <li class="mb-2"><i class="fas fa-phone me-2 text-warning"></i> +91 73854 92339 </li>
                     <li class="mb-2"><i class="fab fa-instagram me-2 text-warning"></i> @status_nx.09 </li>
                     <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-warning"></i> Kale Bazar Peth Road Kale, Taluka: Panhala, Dist: Kolhapur</li>
@@ -385,6 +498,8 @@
         </div>
     </div>
 </footer>
+
+    {% include 'shop/_bottom_nav.html' with active='home' %}
 
     <!-- Wishlist JavaScript Logic -->
     <script>

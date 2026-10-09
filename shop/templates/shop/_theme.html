@@ -1,0 +1,152 @@
+{% load static %}
+<link rel="icon" type="image/jpeg" href="{% static 'images/shop_logo.jpeg' %}">
+<meta name="theme-color" content="#6d4c41">
+<!-- Shared brand theme for Status Clothing Line (colors taken from the logo) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --st-brown: #6d4c41;
+    --st-brown-dark: #55382f;
+    --st-tan: #a98467;
+    --st-sand: #c4a47c;
+    --st-cream: #eceBd5;
+    --st-paper: #faf8f2;
+    --st-ink: #2b211d;
+    --st-muted: #7a6d66;
+    --st-line: #e6dfd3;
+
+    --bs-primary: #6d4c41;
+    --bs-primary-rgb: 109, 76, 65;
+    --bs-link-color: #6d4c41;
+    --bs-link-hover-color: #55382f;
+    --bs-body-font-family: 'Jost', system-ui, sans-serif;
+    --bs-body-color: #2b211d;
+    --bs-body-bg: #faf8f2;
+}
+
+body {
+    font-family: 'Jost', system-ui, sans-serif !important;
+    background-color: var(--st-paper) !important;
+    color: var(--st-ink);
+    -webkit-font-smoothing: antialiased;
+}
+body.bg-light, .bg-light { background-color: var(--st-paper) !important; }
+
+h1, h2, h3, h4, h5, h6, .navbar-brand, .display-5, .modal-title {
+    font-family: 'Cormorant Garamond', Georgia, serif !important;
+    letter-spacing: .2px;
+}
+h5.card-title, .card-title { font-family: 'Jost', sans-serif !important; font-weight: 500 !important; }
+
+/* ---------- Colors: replace blue/indigo/purple everywhere ---------- */
+.text-primary { color: var(--st-brown) !important; }
+.bg-primary { background-color: var(--st-brown) !important; }
+.border-primary { border-color: var(--st-brown) !important; }
+a { color: var(--st-brown); }
+a:hover { color: var(--st-brown-dark); }
+
+.btn-primary,
+.btn-primary-custom, .btn-primary-status, .btn-primary-meesho, .btn-buy {
+    background-color: var(--st-brown) !important;
+    border-color: var(--st-brown) !important;
+    color: #fff !important;
+    border-radius: 10px;
+    font-weight: 500;
+    letter-spacing: .3px;
+}
+.btn-primary:hover, .btn-primary:focus,
+.btn-primary-custom:hover, .btn-primary-status:hover, .btn-primary-meesho:hover, .btn-buy:hover {
+    background-color: var(--st-brown-dark) !important;
+    border-color: var(--st-brown-dark) !important;
+    color: #fff !important;
+}
+.btn-outline-primary, .btn-cart {
+    color: var(--st-brown) !important;
+    border-color: var(--st-brown) !important;
+    background: transparent;
+    border-radius: 10px;
+}
+.btn-outline-primary:hover, .btn-cart:hover {
+    background-color: var(--st-brown) !important;
+    color: #fff !important;
+}
+.size-btn:hover, .size-btn.active, .color-btn.active {
+    border-color: var(--st-brown) !important;
+    color: var(--st-brown) !important;
+    background-color: var(--st-cream) !important;
+}
+.form-control:focus, .form-select:focus, .form-check-input:focus {
+    border-color: var(--st-tan) !important;
+    box-shadow: 0 0 0 .2rem rgba(169, 132, 103, .22) !important;
+}
+.form-check-input:checked { background-color: var(--st-brown); border-color: var(--st-brown); }
+.dropdown-item.active, .dropdown-item:active { background-color: var(--st-brown) !important; color: #fff !important; }
+.badge.bg-danger { background-color: var(--st-brown) !important; }
+
+.btn-cart, .btn-buy { display:flex; align-items:center; justify-content:center; gap:.5rem; min-height:52px; padding-top:0 !important; padding-bottom:0 !important; }
+
+/* ---------- Navbar ---------- */
+.navbar {
+    background-color: rgba(250, 248, 242, .94) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--st-line) !important;
+    box-shadow: none !important;
+}
+.navbar-brand, .navbar-brand span {
+    color: var(--st-brown) !important;
+    font-family: 'Cormorant Garamond', serif !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.navbar .text-dark { color: var(--st-ink) !important; }
+
+/* ---------- Cards ---------- */
+.card, .modal-content {
+    border: 1px solid var(--st-line) !important;
+    border-radius: 14px !important;
+    background: #fff;
+}
+.shadow-sm { box-shadow: 0 2px 10px rgba(85, 56, 47, .06) !important; }
+.shadow { box-shadow: 0 8px 28px rgba(85, 56, 47, .10) !important; }
+.table > :not(caption) > * > * { background-color: transparent; }
+
+/* ---------- Shared small bits ---------- */
+.st-eyebrow {
+    text-transform: uppercase; letter-spacing: 3px; font-size: .72rem;
+    color: var(--st-tan); font-weight: 500;
+}
+
+/* ---------- Step indicator (cart > details > payment) ---------- */
+.st-steps { display:flex; align-items:center; justify-content:center; gap:.6rem; margin: 0 auto 1.6rem; font-size:.85rem; color:var(--st-muted); }
+.st-steps .st-step { display:flex; align-items:center; gap:.45rem; }
+.st-steps .st-dot { width:26px; height:26px; border-radius:50%; border:1px solid var(--st-line); background:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:500; }
+.st-steps .st-step.done .st-dot, .st-steps .st-step.now .st-dot { background:var(--st-brown); border-color:var(--st-brown); color:#fff; }
+.st-steps .st-step.now { color:var(--st-ink); font-weight:500; }
+.st-steps .st-line { width:34px; height:1px; background:var(--st-line); }
+@media (max-width:576px){ .st-steps .st-label{ display:none; } .st-steps .st-step.now .st-label{ display:inline; } }
+
+/* ---------- Trust points ---------- */
+.st-trust { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; }
+.st-trust div { text-align:center; padding:.7rem .3rem; border:1px solid var(--st-line); border-radius:12px; background:var(--st-paper); font-size:.74rem; color:var(--st-muted); line-height:1.3; }
+.st-trust i { display:block; font-size:1.25rem; color:var(--st-brown); margin-bottom:.2rem; }
+
+/* ---------- WhatsApp ---------- */
+.btn-wa { background:#25d366 !important; border-color:#25d366 !important; color:#fff !important; border-radius:10px; font-weight:500; }
+.btn-wa:hover { background:#1ebe5a !important; border-color:#1ebe5a !important; }
+.st-wa-float { position:fixed; right:18px; bottom:22px; width:54px; height:54px; border-radius:50%; background:#25d366; color:#fff !important; display:flex; align-items:center; justify-content:center; font-size:1.7rem; box-shadow:0 8px 22px rgba(0,0,0,.25); z-index:1030; text-decoration:none; }
+@media (max-width: 767.98px) { .st-wa-float { display:none; } }
+
+/* ---------- Mobile bottom navigation ---------- */
+.st-bottomnav { display:none; }
+@media (max-width: 767.98px) {
+    body.has-bottomnav { padding-bottom: 72px; }
+    .st-bottomnav { display:flex; position:fixed; left:0; right:0; bottom:0; z-index:1040; background:rgba(250,248,242,.97); backdrop-filter:blur(8px); border-top:1px solid var(--st-line); padding:6px 0 calc(6px + env(safe-area-inset-bottom)); }
+    .st-bottomnav a { flex:1; text-align:center; text-decoration:none; color:var(--st-muted); font-size:.68rem; display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .st-bottomnav a i { font-size:1.3rem; line-height:1; }
+    .st-bottomnav a.active { color:var(--st-brown); font-weight:500; }
+    .st-bottomnav a.wa i { color:#25d366; }
+}
+</style>
