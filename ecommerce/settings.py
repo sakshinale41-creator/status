@@ -27,7 +27,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Local: True (default).  On Render set environment variable DJANGO_DEBUG=False
-DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -161,8 +161,7 @@ STORAGES = {
 # Render's free disk is wiped on every restart, so photos uploaded in admin must live elsewhere.
 # Set the CLOUDINARY_URL environment variable on Render (see RENDER_SETUP.md) to switch this on.
 if os.environ.get('CLOUDINARY_URL'):
-    _i = INSTALLED_APPS.index('django.contrib.staticfiles')
-    INSTALLED_APPS.insert(_i, 'cloudinary_storage')
+    INSTALLED_APPS.append('cloudinary_storage')
     INSTALLED_APPS.append('cloudinary')
     STORAGES['default'] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
 
@@ -180,7 +179,9 @@ MAILERS = {
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ---------- Order notifications for the shop owner (all optional, set as environment variables) ----------
-# Telegram (recommended, free, works on Render):  TELEGRAM_BOT_TOKEN  and  TELEGRAM_CHAT_ID
+# ntfy push notification (free, no account): set NTFY_TOPIC to a long secret word
+NTFY_TOPIC = os.environ.get('NTFY_TOPIC', '')
+# Telegram (optional, free, works on Render):  TELEGRAM_BOT_TOKEN  and  TELEGRAM_CHAT_ID
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
 TELEGRAM_CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '')
 # Email (optional):  ORDER_NOTIFY_EMAIL, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD (Gmail app password)
