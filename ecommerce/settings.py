@@ -26,7 +26,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-dev-key')
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Local: True (default).  On Render set environment variable DJANGO_DEBUG=False
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -155,6 +156,15 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+# ---------- Permanent storage for product photos (Cloudinary) ----------
+# Render's free disk is wiped on every restart, so photos uploaded in admin must live elsewhere.
+# Set the CLOUDINARY_URL environment variable on Render (see RENDER_SETUP.md) to switch this on.
+if os.environ.get('CLOUDINARY_URL'):
+    _i = INSTALLED_APPS.index('django.contrib.staticfiles')
+    INSTALLED_APPS.insert(_i, 'cloudinary_storage')
+    INSTALLED_APPS.append('cloudinary')
+    STORAGES['default'] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
 
 # Login URLs
 LOGIN_REDIRECT_URL = 'shop:profile'
