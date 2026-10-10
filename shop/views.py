@@ -23,15 +23,22 @@ def _can_view_order(request, order):
 
 
 def _order_summary(order):
-    lines = [f"Order #{order.id}", f"Name: {order.full_name}", f"Phone: {order.phone_number}",
-             f"Address: {order.address} - {order.pincode}", "Items:"]
+    """Generate order summary text."""
+    address_str = f"{order.address} {order.pincode}"
+    lines = [
+        f"Order #{order.id}",
+        f"Name: {order.full_name}",
+        f"Phone: {order.phone_number}",
+        f"Address: {address_str}",
+        "Items:"
+    ]
     for it in order.items.all():
         lines.append(f"  - {it.product.name} | Size {it.size or '-'} | Qty {it.quantity} | Rs {it.price}")
     lines.append(f"Total: Rs {order.total_amount}")
     return "\n".join(lines)
 
 
-def notify_owner(order):
+def notify_order(order):
     """Tell the shop owner about an order. Works only if env vars are set; never breaks the order."""
     text = "NEW ORDER - customer says PAID (please verify in GPay/PhonePe)\n\n" + _order_summary(order)
     token = getattr(settings, 'TELEGRAM_BOT_TOKEN', '')
@@ -45,7 +52,8 @@ def notify_owner(order):
     to = getattr(settings, 'ORDER_NOTIFY_EMAIL', '')
     if to:
         try:
-            send_mail(f"New order #{order.id} - Status", text, settings.DEFAULT_FROM_EMAIL, [to], fail_silently=True)
+            subject = f"New order #{order.id} Status"
+            send_mail(subject, text, settings.DEFAULT_FROM_EMAIL, [to], fail_silently=True)
         except Exception:
             pass
 

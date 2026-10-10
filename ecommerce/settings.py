@@ -27,7 +27,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Local: True (default).  On Render set environment variable DJANGO_DEBUG=False
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() == 'true'
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
