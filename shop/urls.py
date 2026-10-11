@@ -1,11 +1,13 @@
 from django.urls import path
+from django.views.generic import RedirectView
 from . import views
 
 app_name = 'shop'
 
 urlpatterns = [
-    path('', views.product_list, name='product_list'),
-    path('welcome/', views.landing_page, name='landing'),
+    path('', views.landing_page, name='landing'),          # first page: Welcome
+    path('shop/', views.product_list, name='product_list'),  # the shop (home of products)
+    path('welcome/', RedirectView.as_view(pattern_name='shop:landing', permanent=False)),
 
     # Category & Products
     path('category/<slug:category_slug>/', views.product_list, name='product_list_by_category'),
