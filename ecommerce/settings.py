@@ -160,10 +160,36 @@ STORAGES = {
 # ---------- Permanent storage for product photos (Cloudinary) ----------
 # Render's free disk is wiped on every restart, so photos uploaded in admin must live elsewhere.
 # Set the CLOUDINARY_URL environment variable on Render (see RENDER_SETUP.md) to switch this on.
-if os.environ.get('CLOUDINARY_URL'):
+def _clean(v):
+    """Remove spaces, quotes and < > [ ] that people often paste by mistake."""
+    return (v or '').strip().strip('"').strip("'").replace('<', '').replace('>', '').replace('[', '').replace(']', '').strip()
+
+_c_name = _clean(os.environ.get('CLOUDINARY_CLOUD_NAME'))
+_c_key = _clean(os.environ.get('CLOUDINARY_API_KEY'))
+_c_secret = _clean(os.environ.get('CLOUDINARY_API_SECRET'))
+_c_url = _clean(os.environ.get('CLOUDINARY_URL'))
+if _c_url.upper().startswith('CLOUDINARY_URL='):
+    _c_url = _c_url.split('=', 1)[1].strip()
+if _c_url.startswith('cloudinary://') and '@' in _c_url and not (_c_name and _c_key and _c_secret):
+    # Read the 3 values out of the URL ourselves, so a small paste mistake does not break uploads
+    _body = _c_url[len('cloudinary://'):]
+    _cred, _, _c_name = _body.rpartition('@')
+    _c_key, _, _c_secret = _cred.partition(':')
+    _c_name, _c_key, _c_secret = _c_name.strip(), _c_key.strip(), _c_secret.strip()
+
+if _c_name or _c_key or _c_secret or _c_url:
     INSTALLED_APPS.append('cloudinary_storage')
     INSTALLED_APPS.append('cloudinary')
     STORAGES['default'] = {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"}
+    if _c_name and _c_key and _c_secret:
+        CLOUDINARY_STORAGE = {'CLOUD_NAME': _c_name, 'API_KEY': _c_key, 'API_SECRET': _c_secret}
+        # give the cloudinary library a clean, correct URL as well
+        os.environ['CLOUDINARY_URL'] = 'cloudinary://%s:%s@%s' % (_c_key, _c_secret, _c_name)
+    else:
+        os.environ.pop('CLOUDINARY_URL', None)  # a broken value must not crash the whole site
+        # Shows up in the Render Logs (no secrets printed)
+        print("CLOUDINARY PROBLEM -> cloud_name given: %s | api_key given: %s | api_secret given: %s"
+              % (bool(_c_name), bool(_c_key), bool(_c_secret)))
 
 # Login URLs
 LOGIN_REDIRECT_URL = 'shop:profile'
